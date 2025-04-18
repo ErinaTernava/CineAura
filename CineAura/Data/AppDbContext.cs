@@ -12,5 +12,6 @@ namespace CineAura.Data
             _configuration = configuration;
         }
         public DbSet<User> User { get; set; }
+        public DbSet<Genre> Genres { get; set; }
     }
 }
