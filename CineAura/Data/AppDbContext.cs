@@ -13,5 +13,8 @@ namespace CineAura.Data
         }
         public DbSet<User> User { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Hall> Hall { get; set; }
+        public DbSet <Seat> Seat { get; set; }
+
     }
 }
