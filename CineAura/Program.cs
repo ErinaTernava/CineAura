@@ -11,6 +11,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IHallService, HallService>();
+builder.Services.AddScoped<ISeatService, SeatService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
