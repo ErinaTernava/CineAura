@@ -58,10 +58,18 @@ namespace CineAura.Services
             User user = await _context.User.FirstOrDefaultAsync(u => u.Email == request.Email);
 
             if (user == null)
+            {
+                Console.WriteLine($"No user found with email {request.Email}");
                 return null;
+            }
 
             if (!VerifyingPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
+            {
+                Console.WriteLine($"Invalid password for user {request.Email}");
                 return null;
+            }
+
+            Console.WriteLine($"User {request.Email} logged in successfully");
 
             return CreateToken(user);
         }
@@ -100,8 +108,11 @@ namespace CineAura.Services
         {
             List<Claim> claims = new List<Claim>
             {
+
                 new Claim(ClaimTypes.Role, user.IsAdmin.ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Email, user.Email),
+
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
