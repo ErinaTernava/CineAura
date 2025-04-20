@@ -9,13 +9,11 @@ namespace CineAura.Models
         public int Id { get; set; }
         [Required]
         public int UserId { get; set; }
-
-       
         public User User { get; set; }
 
         [Required]
        
-        public bool IsPaid { get; set; } = false;
+        public bool IsPaid { get; set; } = false; 
 
     }
 }

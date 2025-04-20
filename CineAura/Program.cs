@@ -14,6 +14,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IHallService, HallService>();
 builder.Services.AddScoped<ISeatService, SeatService>();
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ICartService, CartService>();
+
 
 // Add services to the container.
 builder.Services.AddControllers();
