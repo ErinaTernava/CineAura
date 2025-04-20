@@ -45,6 +45,27 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region GetByGenre
+
+        public async Task<List<MovieDTO>> GetByGenre(int genreId)
+        {
+            try
+            {
+                var movies = await _context.Movie
+                    .Where(x => x.GenreId == genreId)
+                    .ToListAsync();
+
+                return movies.Adapt<List<MovieDTO>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }
+
+        #endregion
+
         #region Save
         public async Task<bool> Save(MovieDTO movie)
         {
