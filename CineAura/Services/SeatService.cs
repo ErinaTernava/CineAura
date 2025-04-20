@@ -23,70 +23,104 @@ namespace CineAura.Services
             _context = context;
         }
 
-        public async Task<List<SeatDTO>> GetSeatByHallIdAsync(int hallId)
+        #region GetAllByHallId
+        public async Task<List<SeatDTO>> GetAllByHallId(int hallId)
         {
-            return await _context.Seat
-                .Where(s => s.HallId == hallId)
-                .Select(s => new SeatDTO
-                {
-                    Id = s.Id,
-                    Row = s.Row,
-                    SeatNumber = s.SeatNumber,
-                    HallId = s.HallId
-                }).ToListAsync();
-        }
-
-        public async Task<SeatDTO> GetSeatByIdAsync(int id)
-        {
-            var seat = await _context.Seat.FindAsync(id);
-            if (seat == null) return null;
-
-            return new SeatDTO
+            try
             {
-                Id = seat.Id,
-                Row = seat.Row,
-                SeatNumber = seat.SeatNumber,
-                HallId = seat.HallId
-            };
-        }
+                var seats = await _context.Seat
+                    .Where(x => x.HallId == hallId)
+                    .ToListAsync();
 
-        public async Task<SeatDTO> CreateSeatAsync(SeatDTO seatDto)
-        {
-            var seat = new Seat
+                return seats.Adapt<List<SeatDTO>>();
+            }
+            catch (Exception ex)
             {
-                Row = seatDto.Row,
-                SeatNumber = seatDto.SeatNumber,
-                HallId = seatDto.HallId
-            };
-
-            _context.Seat.Add(seat);
-            await _context.SaveChangesAsync();
-
-            seatDto.Id = seat.Id;
-            return seatDto;
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
         }
+        #endregion
 
-        public async Task<bool> UpdateSeatAsync(int id, SeatDTO seatDto)
+        #region GetById
+        public async Task<SeatDTO> GetById(int id)
         {
-            var seat = await _context.Seat.FindAsync(id);
-            if (seat == null) return false;
-
-            seat.Row = seatDto.Row;
-            seat.SeatNumber = seatDto.SeatNumber;
-            seat.HallId = seatDto.HallId;
-
-            await _context.SaveChangesAsync();
-            return true;
+            try
+            {
+                var seat = await _context.Seat.FirstOrDefaultAsync(x => x.Id == id);
+                return seat.Adapt<SeatDTO>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
         }
+        #endregion
 
-        public async Task<bool> DeleteSeatAsync(int id)
+        #region Save
+        public async Task<bool> Save(SeatDTO seat)
         {
-            var seat = await _context.Seat.FindAsync(id);
-            if (seat == null) return false;
+            try
+            {
+                var model = seat.Adapt<Seat>();
+                _context.Seat.Add(model);
+                var result = await _context.SaveChangesAsync();
 
-            _context.Seat.Remove(seat);
-            await _context.SaveChangesAsync();
-            return true;
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
         }
+        #endregion
+
+        #region Update
+        public async Task<bool> Update(int id, SeatDTO seat)
+        {
+            try
+            {
+                var obj = await _context.Seat.FirstOrDefaultAsync(x => x.Id == id);
+                if (obj == null)
+                    return false;
+
+                obj.Row = seat.Row;
+                obj.SeatNumber = seat.SeatNumber;
+                obj.HallId = seat.HallId;
+
+                var result = await _context.SaveChangesAsync();
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }
+        #endregion
+
+        #region Delete
+        public async Task<bool> Delete(int id)
+        {
+            try
+            {
+                var obj = await _context.Seat.FirstOrDefaultAsync(x => x.Id == id);
+                if (obj == null)
+                    return false;
+
+                _context.Seat.Remove(obj);
+                var result = await _context.SaveChangesAsync();
+
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }
+        #endregion
     }
 }

@@ -19,74 +19,77 @@ namespace CineAura.Controllers
             _seatService = seatService;
         }
 
-        [HttpGet("hall/{hallId}")]
-        public async Task<IActionResult> GetByHallId(int hallId)
+        [HttpGet("hallid")]
+        public async Task<IActionResult> GetAllByHallId(int hallId)
         {
             try
             {
-                var seats = await _seatService.GetSeatByHallIdAsync(hallId);
+                var seats = await _seatService.GetAllByHallId(hallId);
                 return Ok(seats);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("getbyid")]
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var seat = await _seatService.GetSeatByIdAsync(id);
-                return seat == null ? NotFound() : Ok(seat);
+                var seat = await _seatService.GetById(id);
+                if (seat == null)
+                    return NotFound();
+
+                return Ok(seat);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne sever: {ex.Message}");
+                return BadRequest(ex.Message);
             }
-
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] SeatDTO dto)
+        public async Task<IActionResult> Save([FromBody] SeatDTO dto)
         {
             try
             {
-                var createdSeat = await _seatService.CreateSeatAsync(dto);
-                return CreatedAtAction(nameof(Get), new { id = createdSeat.Id }, createdSeat);
+                var result = await _seatService.Save(dto);
+                return result ? Ok("Seat u shtua me sukses") : BadRequest("Dështoi shtimi i vendit");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update")]
         public async Task<IActionResult> Update(int id, [FromBody] SeatDTO dto)
         {
             try
             {
-                var updated = await _seatService.UpdateSeatAsync(id, dto);
-                return updated ? NoContent() : NotFound();
+                var result = await _seatService.Update(id, dto);
+                return result ? Ok("Seat u përditësua me sukses") : NotFound();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpDelete("{id}")]
+
+        [HttpDelete("delete")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var deleted = await _seatService.DeleteSeatAsync(id);
-                return deleted ? NoContent() : NotFound();
+                var result = await _seatService.Delete(id);
+                return result ? Ok("Seat u fshi me sukses") : NotFound();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim në server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 

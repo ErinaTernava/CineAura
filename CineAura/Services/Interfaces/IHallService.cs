@@ -7,10 +7,10 @@ namespace CineAura.Services.Interfaces
 {
     public interface IHallService
     {
-        Task<List<HallDTO>> GetAllHallsAsync();
-        Task<HallDTO> GetHallByIdAsync(int id);
-        Task<HallDTO> CreateHallAsync(HallDTO hallDto);
-        Task<bool> UpdateHallAsync(int id, HallDTO hallDto);
-        Task<bool> DeleteHallAsync(int id);
+        Task<List<HallDTO>> GetAll();
+        Task<HallDTO> GetById(int id);
+        Task<bool> Save(HallDTO hall);
+        Task<bool> Update(int id, HallDTO hallDto);
+        Task<bool> Delete(int id);
     }
 }

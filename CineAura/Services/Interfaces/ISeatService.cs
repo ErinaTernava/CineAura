@@ -8,10 +8,10 @@ namespace CineAura.Services.Interfaces
 
     public interface ISeatService
     {
-        Task<List<SeatDTO>> GetSeatByHallIdAsync(int hallId);
-        Task<SeatDTO> GetSeatByIdAsync(int id);
-        Task<SeatDTO> CreateSeatAsync(SeatDTO seatDto);
-        Task<bool> UpdateSeatAsync(int id, SeatDTO seatDto);
-        Task<bool> DeleteSeatAsync(int id);
+        Task<List<SeatDTO>> GetAllByHallId(int hallId);
+        Task<SeatDTO> GetById(int id);
+        Task<bool> Save(SeatDTO seatDto);
+        Task<bool> Update(int id, SeatDTO seatDto);
+        Task<bool> Delete(int id);
     }
 }

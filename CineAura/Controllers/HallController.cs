@@ -24,69 +24,71 @@ namespace CineAura.Controllers
         {
             try
             {
-                var halls = await _hallService.GetAllHallsAsync();
+                var halls = await _hallService.GetAll();
                 return Ok(halls);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("getbyid")]
+        public async Task<IActionResult> GetById(int id)
         {
             try
             {
-                var hall = await _hallService.GetHallByIdAsync(id);
-                return hall == null ? NotFound() : Ok(hall);
+                var hall = await _hallService.GetById(id);
+                if (hall == null)
+                    return NotFound();
+
+                return Ok(hall);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
-
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] HallDTO dto)
+        public async Task<IActionResult> Save([FromBody] HallDTO dto)
         {
             try
             {
-                var newHall = await _hallService.CreateHallAsync(dto);
-                return CreatedAtAction(nameof(Get), new { id = newHall.Id }, newHall);
+                var result = await _hallService.Save(dto);
+                return result ? Ok("Hall u shtua me sukses") : BadRequest("Dështoi shtimi i sallës");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("update")]
         public async Task<IActionResult> Update(int id, [FromBody] HallDTO dto)
         {
             try
             {
-                var updated = await _hallService.UpdateHallAsync(id, dto);
-                return updated ? NoContent() : NotFound();
+                var result = await _hallService.Update(id, dto);
+                return result ? Ok("Hall u përditësua me sukses") : NotFound();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim ne server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var deleted = await _hallService.DeleteHallAsync(id);
-                return deleted ? NoContent() : NotFound();
+                var result = await _hallService.Delete(id);
+                return result ? Ok("Hall u fshi me sukses") : NotFound();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Gabim në server: {ex.Message}");
+                return BadRequest(ex.Message);
             }
         }
     }
