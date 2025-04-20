@@ -1,5 +1,6 @@
 ﻿using CineAura.Data;
 using CineAura.Data.DTO;
+using CineAura.Migrations;
 using CineAura.Models;
 using CineAura.Services.Interfaces;
 using Mapster;
@@ -20,14 +21,29 @@ namespace CineAura.Services
         {
             try
             {
-                return _context.Movie.ToListAsync().Adapt<List<MovieDTO>>();
+                var movies = await _context.Movie.ToListAsync();
+
+                var movieDTOs = movies.Select(m => new MovieDTO
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    Description = m.Description,
+                    Duration = m.Duration,
+                    ReleaseDate = m.ReleaseDate,
+                    EndDate = m.EndDate,
+                    Photo = m.Photo,
+                    GenreId = m.GenreId
+                }).ToList();
+
+                return movieDTOs;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                throw new Exception("An error occurred");
+                Console.WriteLine(ex.ToString());
+                throw new Exception("An error occurred while retrieving movies.");
             }
         }
+
         #endregion
 
         #region GetById
@@ -35,7 +51,12 @@ namespace CineAura.Services
         {
             try
             {
-                return _context.Movie.FirstOrDefaultAsync(x => x.Id == id).Adapt<MovieDTO>();
+                var movie = await _context.Movie.FirstOrDefaultAsync(x => x.Id == id);
+                if (movie == null)
+                {
+                    throw new KeyNotFoundException($"Movie with ID {id} not found");
+                }
+                return movie.Adapt<MovieDTO>();
             }
             catch (Exception ex)
             {

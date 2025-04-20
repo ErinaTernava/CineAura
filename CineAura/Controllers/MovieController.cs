@@ -15,8 +15,9 @@ namespace CineAura.Controllers
         {
             _service = service;
         }
+        
         #region Get
-        [HttpGet]
+        [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
         {
             try
