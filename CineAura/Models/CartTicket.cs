@@ -4,7 +4,7 @@ namespace CineAura.Models
 {
 
     public class CartTicket
-{
+    {
         public int Id { get; set; }
 
         public int CartId { get; set; }
@@ -15,5 +15,6 @@ namespace CineAura.Models
 
         public int SeatId { get; set; }
         public Seat Seat { get; set; }
-	
+    }
 }
+
