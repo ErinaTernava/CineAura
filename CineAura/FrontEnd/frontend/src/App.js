@@ -4,6 +4,7 @@ import IndexPage from './pages/IndexPage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import MoviePage from './pages/MoviePage';
+import CinemaBookingSystem from './pages/CinemaBookingSystem';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
+      <Route path="/CinemaBookingSystem" element={<CinemaBookingSystem/>}/>
     </Routes>
   );
 }
