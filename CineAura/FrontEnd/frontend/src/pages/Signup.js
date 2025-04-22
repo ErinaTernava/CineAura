@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -7,6 +8,7 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState('');
 
   const handleSignup = async (e) => {
@@ -14,6 +16,11 @@ const Signup = () => {
     
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      return;
+    }
+
+    if (!acceptTerms) {
+      setError("You must accept the Terms and Conditions");
       return;
     }
 
@@ -30,17 +37,17 @@ const Signup = () => {
       if (response.status === 200) {
         alert('Signup successful!');
       }
-    }catch (error) {
-        if (error.response) {
-            console.log("Error data: ", error.response.data);
-            alert(`An error occurred: ${error.response.data.message || error.response.data}`);
-        } else if (error.request) {
-            console.log("No response received: ", error.request);
-            alert("An error occurred with the request. Please try again.");
-        } else {
-            console.log("Error message: ", error.message);
-            alert(`An error occurred: ${error.message}`);
-        }
+    } catch (error) {
+      if (error.response) {
+        console.log("Error data: ", error.response.data);
+        alert(`An error occurred: ${error.response.data.message || error.response.data}`);
+      } else if (error.request) {
+        console.log("No response received: ", error.request);
+        alert("An error occurred with the request. Please try again.");
+      } else {
+        console.log("Error message: ", error.message);
+        alert(`An error occurred: ${error.message}`);
+      }
     }
   };
 
@@ -53,8 +60,8 @@ const Signup = () => {
           {error && <div className="alert alert-danger">{error}</div>}
 
           <form onSubmit={handleSignup}> 
-            <label htmlFor="firstName" className="form-label" style={{ color: '#ebd0ad' }}>First Name</label>
             <div className="mb-3">
+              <label htmlFor="firstName" className="form-label" style={{ color: '#ebd0ad' }}>First Name</label>
               <input
                 type="text"
                 value={firstName}
@@ -69,8 +76,9 @@ const Signup = () => {
                 required
               />
             </div>
+            
             <div className="mb-3">
-               <label htmlFor="lastName" className="form-label" style={{ color: '#ebd0ad' }}>Last Name</label>
+              <label htmlFor="lastName" className="form-label" style={{ color: '#ebd0ad' }}>Last Name</label>
               <input
                 type="text"
                 value={lastName}
@@ -85,6 +93,7 @@ const Signup = () => {
                 required
               />
             </div>
+            
             <div className="mb-3">
               <label htmlFor="email" className="form-label" style={{ color: '#ebd0ad' }}>Email Address</label>
               <input
@@ -101,6 +110,7 @@ const Signup = () => {
                 required
               />
             </div>
+            
             <div className="mb-3">
               <label htmlFor="password" className="form-label" style={{ color: '#ebd0ad' }}>Password</label>
               <input
@@ -117,8 +127,9 @@ const Signup = () => {
                 required
               />
             </div>
+            
             <div className="mb-3">
-            <label htmlFor="confirmPassword" className="form-label" style={{ color: '#ebd0ad' }}>Confirm Password</label>
+              <label htmlFor="confirmPassword" className="form-label" style={{ color: '#ebd0ad' }}>Confirm Password</label>
               <input
                 type="password"
                 value={confirmPassword}
@@ -133,6 +144,25 @@ const Signup = () => {
                 required
               />
             </div>
+            
+            <div className="mb-3 form-check">
+              <input
+                type="checkbox"
+                id="acceptTerms"
+                checked={acceptTerms}
+                onChange={(e) => setAcceptTerms(e.target.checked)}
+                className="form-check-input"
+                style={{ 
+                  backgroundColor: acceptTerms ? '#ebd0ad' : '#1a252f',
+                  borderColor: '#ebd0ad'
+                }}
+                required
+              />
+              <label htmlFor="acceptTerms" className="form-check-label ms-2" style={{ color: '#ebd0ad' }}>
+                I agree to the <Link to="/terms" style={{ color: '#ebd0ad', textDecoration: 'underline' }}>Terms and Conditions</Link>
+              </label>
+            </div>
+            
             <button 
               type="submit" 
               className="btn w-100 py-2 mt-3"
@@ -141,12 +171,14 @@ const Signup = () => {
                 color: '#0b1214',
                 fontWeight: 'bold'
               }}
+              disabled={!acceptTerms}
             >
               Sign Up
             </button>
           </form>
+          
           <p className="text-center mt-3" style={{ color: '#ebd0ad' }}>
-            Already have an account? <a href="/login" style={{ color: '#ebd0ad' }}>Login</a>
+            Already have an account? <Link to="/login" style={{ color: '#ebd0ad' }}>Login</Link>
           </p>
         </div>
       </div>
