@@ -7,18 +7,19 @@ import MoviePage from './pages/MoviePage';
 import CinemaBookingSystem from './pages/CinemaBookingSystem';
 
 function App() {
-  return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<IndexPage />} />
-        <Route path="/movies/:id" element={<MoviePage/>}/>
-      </Route>
+    return (
+        <Routes>
+            <Route path="/" element={<Layout />}>
+                <Route index element={<IndexPage />} />
+                <Route path="/movies/:id" element={<MoviePage />} />
+                <Route path="/CinemaBookingSystem" element={<CinemaBookingSystem />} />
 
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/CinemaBookingSystem" element={<CinemaBookingSystem/>}/>
-    </Routes>
-  );
+            </Route>
+
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+        </Routes>
+    );
 }
 
 export default App;
