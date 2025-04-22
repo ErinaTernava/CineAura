@@ -14,6 +14,7 @@ function App() {
         <Route index element={<IndexPage />} />
               <Route path="/movies/:id" element={<MoviePage />} />
               <Route path="/terms" element={<TermsAndConditions />} />
+              <Route path="/CinemaBookingSystem" element={<CinemaBookingSystem />} />
       </Route>
 
             <Route path="/login" element={<Login />} />
@@ -23,3 +24,5 @@ function App() {
 }
 
 export default App;
+
+
