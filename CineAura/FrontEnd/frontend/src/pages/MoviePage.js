@@ -7,6 +7,7 @@ const MoviePage = () => {
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState('');
+ 
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -92,7 +93,7 @@ const MoviePage = () => {
               {status}
             </span>
           </div>
-          
+        
           <h4 className="mb-3" style={{ color: '#ebd0ad' }}>Synopsis</h4>
           <p className="lead">{movie.description}</p>
           
@@ -108,6 +109,7 @@ const MoviePage = () => {
         </div>
       </div>
     </div>
+   
   );
 };
 
