@@ -15,9 +15,10 @@ namespace CineAura.Controllers
             {
                 _service = ticketService;
             }
+
         #region GetTicketsByUserId
-        [HttpPost("HttpGet")]
-            public async Task<IActionResult> TicketsByUserId([FromBody] int userId)
+        [HttpGet("ticketbyuser")]
+            public async Task<IActionResult> TicketsByUserId(int userId)
             {
                 try
                 {

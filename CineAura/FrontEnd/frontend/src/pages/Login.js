@@ -27,7 +27,7 @@ const Login = () => {
       });
 
       setCookie('access_token', response.data.token, { path: '/' });
-      navigate('IndexPage');
+      navigate('/');
       window.location.reload();
     } catch (err) {
       if (err.response) {
