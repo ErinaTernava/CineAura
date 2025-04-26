@@ -140,7 +140,7 @@ namespace CineAura.Services
             {
                 var obj = _context.Movie.FirstOrDefault(x => x.Id == id);
                 _context.Movie.Remove(obj);
-                var result = await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync(); 
 
                 return result > 0;
             }
