@@ -15,7 +15,7 @@ namespace CineAura.Controllers
         {
             _service = service;
         }
-        
+
         #region Get
         [HttpGet("getAll")]
         public async Task<IActionResult> GetAll()
@@ -30,7 +30,7 @@ namespace CineAura.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        #endregion
+        #endregion 
 
         #region GetById
 

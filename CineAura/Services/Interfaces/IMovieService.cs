@@ -8,7 +8,6 @@ namespace CineAura.Services.Interfaces
         Task<List<MovieDTO>> GetAll();
         Task<MovieDTO> GetById(int id);
         Task<List<MovieDTO>> GetByGenre(int genreId);
-
         Task<bool> Save(MovieDTO movie);
         Task<bool> Update(int id, MovieDTO movie);
         Task<bool> Delete(int id);
