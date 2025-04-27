@@ -10,8 +10,6 @@ namespace CineAura.Services.Interfaces
     {
         Task<List<SeatDTO>> GetAllByHallId(int hallId);
         Task<SeatDTO> GetById(int id);
-        Task<bool> Save(SeatDTO seatDto);
-        Task<bool> Update(int id, SeatDTO seatDto);
-        Task<bool> Delete(int id);
+       
     }
 }

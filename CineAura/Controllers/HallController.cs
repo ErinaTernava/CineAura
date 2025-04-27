@@ -19,12 +19,17 @@ namespace CineAura.Controllers
             _hallService = hallService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+
+        #region GetByMovieId
+        [HttpGet("getByMovieId")]
+        public async Task<IActionResult> GetByMovieId(int movieId)
         {
             try
             {
-                var halls = await _hallService.GetAll();
+                var halls = await _hallService.GetByMovieId(movieId);
+                if (halls == null || halls.Count == 0)
+                    return NotFound($"No halls found for Movie ID {movieId}");
+
                 return Ok(halls);
             }
             catch (Exception ex)
@@ -32,65 +37,9 @@ namespace CineAura.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        #endregion
 
-        [HttpGet("getbyid")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            try
-            {
-                var hall = await _hallService.GetById(id);
-                if (hall == null)
-                    return NotFound();
-
-                return Ok(hall);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Save([FromBody] HallDTO dto)
-        {
-            try
-            {
-                var result = await _hallService.Save(dto);
-                return result ? Ok("Hall u shtua me sukses") : BadRequest("Dështoi shtimi i sallës");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> Update(int id, [FromBody] HallDTO dto)
-        {
-            try
-            {
-                var result = await _hallService.Update(id, dto);
-                return result ? Ok("Hall u përditësua me sukses") : NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete(int id)
-        {
-            try
-            {
-                var result = await _hallService.Delete(id);
-                return result ? Ok("Hall u fshi me sukses") : NotFound();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+      
     }
 }
 
