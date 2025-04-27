@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const CinemaBookingSystem = () => {
-    // Seat status: 'available', 'booked', 'selected'
+    
     const initialSeats = {
         A: Array.from({ length: 10 }, (_, i) => ({
             id: `A${10 - i}`,
@@ -57,7 +57,6 @@ const CinemaBookingSystem = () => {
     const handleBooking = () => {
         const newSeats = { ...seats };
 
-        // Mark all selected seats as booked
         selectedSeats.forEach(seatId => {
             const row = seatId[0];
             const seatIndex = newSeats[row].findIndex(s => s.id === seatId);
@@ -74,7 +73,7 @@ const CinemaBookingSystem = () => {
     const handleCancelTicket = () => {
         const newSeats = { ...seats };
 
-        // Mark all booked seats as available
+        
         bookedSeats.forEach(seatId => {
             const row = seatId[0];
             const seatIndex = newSeats[row].findIndex(s => s.id === seatId);
@@ -88,9 +87,9 @@ const CinemaBookingSystem = () => {
     };
 
     const getSeatColor = (status, isPremium) => {
-        if (status === 'booked') return '#DC3545'; // Red
-        if (status === 'selected') return '#FFC107'; // Yellow
-        return isPremium ? '#007BFF' : '#6C757D'; // Blue (premium) / Grey (standard)
+        if (status === 'booked') return '#DC3545'; 
+        if (status === 'selected') return '#FFC107'; 
+        return isPremium ? '#007BFF' : '#6C757D'; 
     };
 
     const calculateTotal = (seatsToCalculate = selectedSeats) => {
@@ -110,7 +109,7 @@ const CinemaBookingSystem = () => {
             color: '#e0e0e0',
             fontFamily: 'Arial, sans-serif'
         }}>
-            {/* Cinema Layout */}
+            
             <div style={{ flex: 2 }}>
                 <div style={{
                     backgroundColor: '#1e1e1e',
@@ -128,7 +127,7 @@ const CinemaBookingSystem = () => {
                         Screen
                     </h2>
 
-                    {/* Seating Rows */}
+                    
                     <div style={{ margin: '30px 0' }}>
                         {Object.entries(seats).map(([row, rowSeats]) => (
                             <div key={row} style={{
@@ -192,7 +191,7 @@ const CinemaBookingSystem = () => {
                 </div>
             </div>
 
-            {/* Booking Controls */}
+            
             <div style={{ flex: 1 }}>
                 <div style={{
                     backgroundColor: '#1e1e1e',
