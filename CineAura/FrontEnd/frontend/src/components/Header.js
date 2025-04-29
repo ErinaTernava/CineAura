@@ -1,16 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import useAuthToken from '../hooks/useAuthToken';
+
 const Header = () => {
-  const { token, clearToken, userRole } = useAuthToken();
+  const { token, userRole, clearToken } = useAuthToken();
   const navigate = useNavigate();
-  const [, , removeCookie] = useCookies(['access_token']);
 
   const handleLogout = () => {
     clearToken();
-    removeCookie('access_token', { path: '/' });
     navigate('/');
-    window.location.reload(); 
+    window.location.reload();
   };
 
   return (
@@ -19,14 +17,14 @@ const Header = () => {
         height: '80px',
         display: 'flex',
         alignItems: 'center',
-        padding: '10 25px',
+        padding: '10px 25px',
         position: 'sticky',
         top: 0,
         zIndex: 1000
-       }}>
+      }}>
       <div className="container d-flex justify-content-between align-items-center">
         <Link to="/" className="text-decoration-none">
-        <img 
+          <img 
             src="/Images/CineAura.png" 
             alt="CineAura Logo"
             style={{
@@ -36,15 +34,23 @@ const Header = () => {
               objectFit: 'contain', 
               padding: '5px 0' 
             }}
-          />       
-         </Link>
+          />
+        </Link>
         <nav className="d-flex align-items-center">
-          <Link to="/" className="text-decoration-none mx-3" style={{ color: '#ebd0ad' }}>Home</Link>
-          
+          <Link to="/" className="text-decoration-none mx-3" style={{ color: '#ebd0ad' }}>
+            Home
+          </Link>
+
+          <Link to="/cart" className="text-decoration-none mx-3" style={{ color: '#ebd0ad' }}>
+            Cart
+          </Link>
+
           {token ? (
             <>
-            {userRole === 'Admin' && (
-                <Link to="/admin" className="nav-link">Admin</Link>
+              {userRole === 'Admin' && (
+                <Link to="/admin" className="text-decoration-none mx-3" style={{ color: '#ebd0ad' }}>
+                  Admin
+                </Link>
               )}
               <Link to="/profile" className="text-decoration-none mx-3" style={{ color: '#ebd0ad' }}>
                 Profile

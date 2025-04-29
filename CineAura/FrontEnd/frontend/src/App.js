@@ -6,6 +6,7 @@ import Signup from './pages/Signup';
 import MoviePage from './pages/MoviePage';
 import CinemaBookingSystem from './pages/CinemaBookingSystem';
 import TermsAndConditions from './pages/TermsAndConditions';
+import CartPage from './pages/CartPage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
               <Route path="/movies/:id" element={<MoviePage />} />
               <Route path="/terms" element={<TermsAndConditions />} />
               <Route path="/seatPicker" element={<CinemaBookingSystem />} />
+              <Route path="/cart" element={<CartPage />} />
       </Route>
 
             <Route path="/login" element={<Login />} />

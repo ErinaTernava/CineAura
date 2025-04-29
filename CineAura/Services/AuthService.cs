@@ -42,7 +42,16 @@ namespace CineAura.Services
                 _context.User.Add(user);
                 await _context.SaveChangesAsync();
 
-                return user.Adapt<UserDTO>(); ;
+                Cart cart = new Cart
+                {
+                    UserId = user.Id,
+                    IsPaid = false
+                };
+
+                _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
+
+                return user.Adapt<UserDTO>();
             }
             catch (Exception ex)
             {
@@ -51,6 +60,7 @@ namespace CineAura.Services
             }
         }
         #endregion
+
 
         #region Login
         public async Task<string> Login(UserLoginDTO request)

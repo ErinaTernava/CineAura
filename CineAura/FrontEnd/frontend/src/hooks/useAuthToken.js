@@ -3,7 +3,8 @@ import { useCookies } from 'react-cookie';
 import { jwtDecode } from 'jwt-decode';
 
 const useAuthToken = () => {
-  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);  const [token, setToken] = useState(cookies.access_token || '');
+  const [cookies, setCookie, removeCookie] = useCookies(['access_token']);
+  const [token, setToken] = useState(cookies.access_token || '');
   const [userId, setUserId] = useState('');
   const [userRole, setUserRole] = useState(null);
 
@@ -19,7 +20,7 @@ const useAuthToken = () => {
 
         setUserId(id);
         setUserRole(role);
-      }else {
+      } else {
         setUserId('');
         setUserRole(null);
       }
@@ -34,8 +35,8 @@ const useAuthToken = () => {
     setUserId('');
     setUserRole(null);
   };
-  
-  return { token, userId, userRole };
+
+  return { token, userId, userRole, clearToken };
 };
 
 export default useAuthToken;
