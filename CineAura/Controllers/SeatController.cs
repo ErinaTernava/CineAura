@@ -1,6 +1,7 @@
 ﻿using CineAura.Data.DTO;
 using CineAura.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 
@@ -34,6 +35,7 @@ namespace CineAura.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         #endregion
 
         #region GetById
