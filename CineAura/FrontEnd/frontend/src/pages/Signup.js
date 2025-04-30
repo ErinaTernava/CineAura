@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');
@@ -10,6 +10,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState('');
+  const navigate = useNavigate();  
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -36,6 +37,7 @@ const Signup = () => {
 
       if (response.status === 200) {
         alert('Signup successful!');
+        navigate('/login');
       }
     } catch (error) {
       if (error.response) {

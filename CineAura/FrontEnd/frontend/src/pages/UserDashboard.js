@@ -91,9 +91,10 @@ const UserDashboard = () => {
       setMessage({ text: "Passwords don't match", type: 'error' });
       return;
     }
+    const userId = localStorage.getItem("userId");
 
     try {
-      const response = await fetch(`http://localhost:5283/api/Auth/changepassword`, {
+      const response = await fetch(`http://localhost:5283/api/Auth/changepassword?id=${userId}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -121,8 +122,10 @@ const UserDashboard = () => {
   };
 
   const handleDeleteAccount = async () => {
+    const userId = localStorage.getItem("userId");
+
     try {
-      const response = await fetch(`http://localhost:5283/api/User/delete`, {
+      const response = await fetch(`http://localhost:5283/api/User/delete?id=${userId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem("token")}`,
@@ -131,7 +134,8 @@ const UserDashboard = () => {
       });
 
       if (response.ok) {
-        localStorage.clear();
+        localStorage.removeItem("token");
+        localStorage.removeItem("userId");
         window.location.href = '/login';
       } else {
         throw new Error('Deletion failed');
