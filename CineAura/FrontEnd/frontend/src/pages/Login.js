@@ -26,9 +26,19 @@ const Login = () => {
         password: password.trim(),
       });
 
-      setCookie('access_token', response.data.token, { path: '/' });
-      navigate('/');
-      window.location.reload();
+      const { token } = response.data;
+
+      setCookie('access_token', token, { path: '/' });
+
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+      localStorage.setItem("userId", userId);  
+
+      localStorage.setItem("token", token); 
+
+      navigate('/'); 
+
+      window.location.reload(); 
     } catch (err) {
       if (err.response) {
         console.log('Error Response:', err.response);
@@ -45,7 +55,6 @@ const Login = () => {
       <div className="d-flex justify-content-center align-items-center py-5">
         <div className="col-md-5 p-4 rounded" style={{ backgroundColor: '#1a252f' }}>
           <h2 className="text-center mb-4" style={{ color: '#ebd0ad' }}>Login</h2>
-          
 
           <form onSubmit={handleLogin}>
             <div className="mb-3">
@@ -102,4 +111,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;

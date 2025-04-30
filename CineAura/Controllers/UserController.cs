@@ -1,6 +1,8 @@
 ﻿using CineAura.Data.DTO;
 using CineAura.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CineAura.Controllers
 {
@@ -58,11 +60,11 @@ namespace CineAura.Controllers
         {
             try
             {
-                var result = await _service.Update(id, request);
-                if (result == null)
-                    return NotFound();
+                var updatedUser = await _service.Update(id, request);
+                if (updatedUser == null)
+                    return NotFound($"User with id {id} not found");
 
-                return Ok(result);
+                return Ok(updatedUser);
             }
             catch (Exception ex)
             {

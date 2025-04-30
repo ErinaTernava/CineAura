@@ -70,21 +70,21 @@ namespace CineAura.Services
         #endregion
 
         #region Update
-        public async Task<bool> Update(int id, UserDTO user)
+        public async Task<UserDTO> Update(int id, UserDTO userDto)
         {
             try
             {
                 var obj = await _context.User.FirstOrDefaultAsync(x => x.Id == id);
                 if (obj == null)
-                    return false;
+                    return null;
 
-                obj.FirstName = user.FirstName;
-                obj.LastName = user.LastName;
-                obj.Email = user.Email;
-               
-                var result = await _context.SaveChangesAsync();
+                obj.FirstName = userDto.FirstName;
+                obj.LastName = userDto.LastName;
+                obj.Email = userDto.Email;
 
-                return result > 0;
+                await _context.SaveChangesAsync();
+
+                return obj.Adapt<UserDTO>();
             }
             catch (Exception ex)
             {
