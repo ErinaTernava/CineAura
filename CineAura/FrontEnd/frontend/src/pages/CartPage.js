@@ -10,26 +10,40 @@ const CartPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const getUserId = () => {
+    if (!token) return null;
+    
+    const storedUserId = localStorage.getItem("userId");
+    if (storedUserId) return storedUserId;
+  
+    try {
+      const decodedToken = jwtDecode(token);
+      return decodedToken.nameid || decodedToken.sub || decodedToken.id || decodedToken.userId || null;
+    } catch (err) {
+      console.error('Error decoding token:', err);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchCart = async () => {
+      setLoading(true);
+      setError(null);
+
       if (!token) {
-        setError('User not authenticated');
+        setLoading(false);
+        navigate('/login', { state: { from: '/cart' } });
+        return;
+      }
+
+      const userId = getUserId();
+      if (!userId) {
+        setError('Unable to identify user. Please log in again.');
         setLoading(false);
         return;
       }
 
       try {
-        const decodedToken = jwtDecode(token);
-        console.log('Full decoded token:', decodedToken);
-
-        const userId = decodedToken.nameid || decodedToken.sub || decodedToken.id || decodedToken.userId || null;
-
-        if (!userId) {
-          setError('User ID not found in token');
-          setLoading(false);
-          return;
-        }
-
         console.log(`Fetching cart for user ID: ${userId}`);
 
         const response = await fetch(`http://localhost:5283/api/Cart/user?userId=${userId}`, {
@@ -39,8 +53,6 @@ const CartPage = () => {
             'Content-Type': 'application/json',
           }
         });
-
-        console.log('Initial cart fetch response status:', response.status);
 
         if (response.status === 404) {
           console.log('Cart not found, creating new cart...');
@@ -57,14 +69,12 @@ const CartPage = () => {
           }
           
           const newCart = await createResponse.json();
-          console.log('New cart created:', newCart);
           setCart(newCart);
         } else if (!response.ok) {
           const errorText = await response.text();
           throw new Error(`Error fetching cart: ${response.status} - ${errorText}`);
         } else {
           const cartData = await response.json();
-          console.log('Existing cart found:', cartData);
           setCart(cartData); 
         }
       } catch (err) {
@@ -76,11 +86,14 @@ const CartPage = () => {
     };
 
     fetchCart();
-  }, [token]);
+  }, [token, navigate]);
 
   const handleRemoveTicket = async (ticketId) => {
     try {
-      console.log(`Removing ticket ${ticketId} from cart ${cart?.id}`);
+      if (!cart?.id) {
+        throw new Error('No cart available');
+      }
+
       const response = await fetch(`http://localhost:5283/api/CartTicket/remove?ticketId=${ticketId}`, {
         method: 'DELETE',
         headers: {
@@ -110,7 +123,6 @@ const CartPage = () => {
     }
 
     try {
-      console.log(`Processing checkout for cart ${cart.id}`);
       const response = await fetch(`http://localhost:5283/api/Cart/pay?cartId=${cart.id}`, {
         method: 'PUT',
         headers: {
@@ -146,11 +158,37 @@ const CartPage = () => {
       <div className="container py-4">
         <div className="alert alert-danger">
           Error: {error}
+          {!token && (
+            <button 
+              className="btn btn-sm btn-outline-secondary ms-3"
+              onClick={() => navigate('/login')}
+            >
+              Login
+            </button>
+          )}
+          {token && (
+            <button 
+              className="btn btn-sm btn-outline-secondary ms-3"
+              onClick={() => window.location.reload()}
+            >
+              Try Again
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (!token) {
+    return (
+      <div className="container py-4">
+        <div className="alert alert-warning">
+          Please log in to view your cart.
           <button 
-            className="btn btn-sm btn-outline-secondary ms-3"
-            onClick={() => setError(null)}
+            className="btn btn-sm btn-outline-primary ms-3"
+            onClick={() => navigate('/login')}
           >
-            Try Again
+            Login
           </button>
         </div>
       </div>
