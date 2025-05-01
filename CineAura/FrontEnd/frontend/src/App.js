@@ -8,6 +8,7 @@ import SeatPicker from './pages/SeatPicker';
 import TermsAndConditions from './pages/TermsAndConditions';
 import CartPage from './pages/CartPage';
 import UserDashboard from './pages/UserDashboard';
+import Help from './pages/Help';
 
 function App() {
   return (
@@ -19,7 +20,6 @@ function App() {
               <Route path="/profile" element={<UserDashboard />} />
               <Route path="/seatPicker" element={<SeatPicker />} />
               <Route path="/cart" element={<CartPage />} />
-             
               
       </Route>
             <Route path="/login" element={<Login />} />
