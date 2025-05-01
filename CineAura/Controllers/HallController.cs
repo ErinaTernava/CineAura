@@ -38,8 +38,27 @@ namespace CineAura.Controllers
             }
         }
         #endregion
+       
+        #region GetById
 
-      
+        [HttpGet("getbyid")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                var movie = await _hallService.GetById(id);
+                if (movie == null)
+                    return NotFound();
+
+                return Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
     }
 }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 const SeatPicker = () => {
   const [hallSeats, setHallSeats] = useState([]);
@@ -10,11 +10,16 @@ const SeatPicker = () => {
   const [bookedSeats, setBookedSeats] = useState([]);
   const [movie, setMovie] = useState(null);
   const [showtime, setShowtime] = useState(null);
+  const [hall, setHall] = useState(null);
   const navigate = useNavigate();
+  const { search } = useLocation();
+  const params = new URLSearchParams(search);
+
   const location = useLocation();
-
-  const { movieId, showtimeId } = location.state || {};
-
+  const searchParams = new URLSearchParams(location.search);
+  const movieId = searchParams.get('movieId');
+  const hallId = searchParams.get('hallId');
+  const showtimeId = searchParams.get('showtimeId');
   useEffect(() => {
     const fetchMovie = async () => {
       if (!movieId) return;
@@ -34,7 +39,25 @@ const SeatPicker = () => {
     fetchMovie();
   }, [movieId]);
 
-  
+  useEffect(() => {
+    const fetchHall = async () => {
+      if (!hallId) return;
+      
+      try {
+        const response = await fetch(`http://localhost:5283/api/Hall/getbyid?id=${hallId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch hall');
+        }
+        const data = await response.json();
+        setHall(data);
+      } catch (err) {
+        console.error('Error fetching hall:', err);
+      }
+    };
+
+    fetchHall();
+  }, [hallId]);
+
   useEffect(() => {
     const fetchShowtime = async () => {
       if (!showtimeId) return;
@@ -46,7 +69,6 @@ const SeatPicker = () => {
         }
         const data = await response.json();
         setShowtime(data);
-        
         setViewType(data.hallId <= 2 ? '2d' : '3d');
       } catch (err) {
         console.error('Error fetching showtime:', err);
@@ -56,7 +78,6 @@ const SeatPicker = () => {
     fetchShowtime();
   }, [showtimeId]);
 
-  
   useEffect(() => {
     const generateSeatLayout = () => {
       try {
@@ -64,7 +85,7 @@ const SeatPicker = () => {
         
         const rows = ['A', 'B', 'C', 'D', 'E', 'F'];
         const seatsPerRow = viewType === '2d' ? 11 : 10;
-        const totalSeats = viewType === '2d' ? 66 : 60;
+        const totalSeats = viewType === '2d' ? 66 : 56;
         
         const generatedSeats = [];
         let seatNumber = 1;
@@ -81,8 +102,9 @@ const SeatPicker = () => {
               isAvailable: !bookedSeats.includes(seatId),
               price: showtime ? showtime.ticketPrice : 4,
               type: viewType,
-              movie: movie ? movie.title : 'Unknown Movie',
-              showtime: showtime ? new Date(showtime.startTime).toLocaleString() : 'Unknown Time'
+              movieTitle: movie ? movie.title : 'Unknown Movie',
+              showtime: showtime ? new Date(showtime.startTime).toLocaleString() : 'Unknown Time',
+              hallName: hall ? hall.hallName : 'Unknown Hall'
             });
             seatNumber++;
           }
@@ -98,7 +120,7 @@ const SeatPicker = () => {
     };
 
     generateSeatLayout();
-  }, [viewType, bookedSeats, movie, showtime]);
+  }, [viewType, bookedSeats, movie, showtime, hall]);
 
   const toggleSeatSelection = (seat) => {
     if (!seat.isAvailable) return;
@@ -126,10 +148,12 @@ const SeatPicker = () => {
       position: seat.position,
       price: seat.price,
       type: seat.type,
-      movie: seat.movie,
+      movieTitle: seat.movieTitle,
       showtime: seat.showtime,
+      hallName: seat.hallName,
       movieId: movieId,
-      showtimeId: showtimeId
+      showtimeId: showtimeId,
+      hallId: hallId
     }));
     
     navigate('/cart', { state: { tickets } });
@@ -141,12 +165,13 @@ const SeatPicker = () => {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      height: '200px'
+      height: '200px',
+      color: 'white'
     }}>
       <div style={{
         border: '4px solid rgba(0, 0, 0, 0.1)',
         borderRadius: '50%',
-        borderTop: '4px solid #6c757d',
+        borderTop: '4px solid #ebd0ad',
         width: '40px',
         height: '40px',
         animation: 'spin 1s linear infinite',
@@ -156,7 +181,16 @@ const SeatPicker = () => {
     </div>
   );
   
-  if (error) return <div style={{ color: '#f44336', padding: '20px', textAlign: 'center' }}>Error: {error}</div>;
+  if (error) return (
+    <div style={{ 
+      color: '#f44336', 
+      padding: '20px', 
+      textAlign: 'center',
+      backgroundColor: '#1a1a1a'
+    }}>
+      Error: {error}
+    </div>
+  );
 
   return (
     <div style={{
@@ -169,12 +203,13 @@ const SeatPicker = () => {
       borderRadius: '8px',
       boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
     }}>
-      
-      <h1 style={{ textAlign: 'center', color: 'white', marginBottom: '10px' }}>Seat Selection</h1>
-      {movie && <h2 style={{ textAlign: 'center', color: '#ff9800', marginTop: '0' }}>{movie.title}</h2>}
-      {showtime && <p style={{ textAlign: 'center', color: '#bdbdbd' }}>
-        {new Date(showtime.startTime).toLocaleString()} | Hall {showtime.hallId}
-      </p>}
+      <h1 style={{ textAlign: 'center', color: '#ebd0ad', marginBottom: '10px' }}>Seat Selection</h1>
+      {movie && <h2 style={{ textAlign: 'center', color: '#ebd0ad', marginTop: '0' }}>{movie.title}</h2>}
+      {showtime && hall && (
+        <p style={{ textAlign: 'center', color: '#bdbdbd' }}>
+          {new Date(showtime.startTime).toLocaleString()} | {hall.hallName} ({hall.hallType})
+        </p>
+      )}
       
       <div style={{ 
         textAlign: 'center', 
@@ -183,6 +218,7 @@ const SeatPicker = () => {
         color: 'white',
         fontSize: '1.2rem'
       }}>SCREEN</div>
+      
       <div style={{
         height: '20px',
         background: 'linear-gradient(to bottom, #4a90e2, #2a70c8)',
@@ -206,7 +242,7 @@ const SeatPicker = () => {
               <div style={{ 
                 width: '20px', 
                 fontWeight: 'bold', 
-                color: '#ff9800',
+                color: '#ebd0ad',
                 fontSize: '1.1rem'
               }}>{row}</div>
               <div style={{ display: 'flex', gap: '8px' }}>
@@ -233,10 +269,7 @@ const SeatPicker = () => {
                       justifyContent: 'center',
                       fontSize: '12px',
                       fontWeight: 'bold',
-                      transition: 'all 0.2s ease',
-                      ':hover': {
-                        transform: seat.isAvailable ? 'scale(1.1)' : 'none'
-                      }
+                      transition: 'all 0.2s ease'
                     }}
                     disabled={!seat.isAvailable}
                   >
@@ -297,7 +330,7 @@ const SeatPicker = () => {
           border: '1px solid #444',
           color: 'white'
         }}>
-          <h3 style={{ marginTop: '0', color: '#ff9800' }}>Your Selection ({selectedSeats.length})</h3>
+          <h3 style={{ marginTop: '0', color: '#ebd0ad' }}>Your Selection ({selectedSeats.length})</h3>
           <ul style={{ paddingLeft: '20px', marginBottom: '15px' }}>
             {selectedSeats.map(seat => (
               <li key={seat.id} style={{ marginBottom: '5px' }}>
@@ -316,8 +349,8 @@ const SeatPicker = () => {
           <button 
             onClick={proceedToCart} 
             style={{
-              background: '#ff5722',
-              color: 'white',
+              background: '#ebd0ad',
+              color: '#1a1a2e',
               border: 'none',
               padding: '12px 24px',
               borderRadius: '4px',
@@ -328,7 +361,7 @@ const SeatPicker = () => {
               fontSize: '1rem',
               transition: 'background 0.3s ease',
               ':hover': {
-                background: '#e64a19'
+                background: '#d4b98c'
               }
             }}
           >

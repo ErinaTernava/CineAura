@@ -32,7 +32,7 @@ const MoviePage = () => {
             ...showtime,
             startTime: new Date(showtime.startTime),
             hallName: showtime.hall?.hallName || `Hall ${showtime.hallId}`,
-            hallType: showtime.hall?.hallType || 'Standard'
+            hallType: showtime.hall?.hallType || '2D'
           }));
           
           setShowtimes(formattedShowtimes);
