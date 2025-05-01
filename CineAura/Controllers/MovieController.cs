@@ -1,4 +1,5 @@
 ﻿using CineAura.Data.DTO;
+using CineAura.Services;
 using CineAura.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -109,6 +110,25 @@ namespace CineAura.Controllers
         }
         #endregion
 
+        #region SearchMovie
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchMovies([FromQuery] string query)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(query))
+                    return BadRequest("Query is required.");
+
+                var movies = await _service.SearchMovies(query);
+                return Ok(movies);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        #endregion
 
         #region Delete
         [HttpDelete("delete")]

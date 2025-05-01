@@ -1,4 +1,5 @@
 ﻿using CineAura.Data.DTO;
+using CineAura.Models;
 using System.Threading.Tasks;
 
 namespace CineAura.Services.Interfaces
@@ -11,5 +12,9 @@ namespace CineAura.Services.Interfaces
         Task<bool> Save(MovieDTO movie);
         Task<bool> Update(int id, MovieDTO movie);
         Task<bool> Delete(int id);
+       
+        Task<IEnumerable<Movie>> SearchMovies(string query);
+
+
     }
 }

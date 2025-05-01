@@ -133,6 +133,38 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region SearchMovies
+        public async Task<IEnumerable<Movie>> SearchMovies(string query)
+        {
+            try
+            {
+                
+                var moviesQuery = _context.Movie.AsQueryable();
+
+                if (!string.IsNullOrEmpty(query))
+                {
+                    
+                    moviesQuery = moviesQuery.Where(m => m.Title.Contains(query));
+                }
+
+                var result = await moviesQuery.ToListAsync();
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+               
+                Console.WriteLine($"Error in SearchMovies: {ex.Message}");
+
+                
+                throw new Exception("An error occurred while searching for movies.");
+            }
+        }
+
+
+
+        #endregion
+
         #region Delete
         public async Task<bool> Delete(int id)
         {

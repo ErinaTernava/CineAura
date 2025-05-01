@@ -1,5 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthToken from '../hooks/useAuthToken';
+import SearchBar from './SearchBar';
 
 const Header = () => {
   const { token, userRole, clearToken } = useAuthToken();
@@ -9,6 +10,10 @@ const Header = () => {
     clearToken();
     navigate('/');
     window.location.reload();
+  };
+  
+  const handleSearch = (query) => {
+    navigate(`/search?query=${encodeURIComponent(query)}`);
   };
 
   return (
@@ -23,19 +28,28 @@ const Header = () => {
         zIndex: 1000
       }}>
       <div className="container d-flex justify-content-between align-items-center">
-        <Link to="/" className="text-decoration-none">
-          <img 
-            src="/Images/CineAura.png" 
-            alt="CineAura Logo"
-            style={{
-              height: '1000%', 
-              width: 'auto',
-              maxHeight: '75px', 
-              objectFit: 'contain', 
-              padding: '5px 0' 
-            }}
-          />
-        </Link>
+  
+        <div className="d-flex align-items-center">
+          <Link to="/" className="text-decoration-none">
+            <img 
+              src="/Images/CineAura.png" 
+              alt="CineAura Logo"
+              style={{
+                height: '1000%', 
+                width: 'auto',
+                maxHeight: '75px', 
+                objectFit: 'contain', 
+                padding: '5px 0' 
+              }}
+            />
+          </Link>
+         
+          <div className="ms-4">
+            <SearchBar onSearch={handleSearch} />
+          </div>
+        </div>
+
+       
         <nav className="d-flex align-items-center">
           <Link to="/" className="text-decoration-none mx-3" style={{ color: '#ebd0ad' }}>
             Home
