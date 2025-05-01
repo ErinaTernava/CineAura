@@ -16,7 +16,7 @@ namespace CineAura.Controllers
 
         
 
-        #region GetByMovieAndHall
+        #region GetByMovie
         [HttpGet("getByMovie")]
         public async Task<IActionResult> GetByMovie(int movieId)
         {

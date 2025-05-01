@@ -20,7 +20,7 @@ namespace CineAura.Services
 
        
 
-        #region GetByMovieAndHall
+        #region GetByMovie
         public async Task<List<ShowtimeDTO>> GetByMovie(int movieId)
         {
             try
