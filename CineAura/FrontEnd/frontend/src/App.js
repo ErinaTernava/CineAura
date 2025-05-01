@@ -8,6 +8,7 @@ import CinemaBookingSystem from './pages/CinemaBookingSystem';
 import TermsAndConditions from './pages/TermsAndConditions';
 import CartPage from './pages/CartPage';
 import UserDashboard from './pages/UserDashboard';
+import Help from './pages/Help';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route path="/profile" element={<UserDashboard />} />
               <Route path="/seatPicker" element={<CinemaBookingSystem />} />
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/help" element={<Help />} />
               
       </Route>
             <Route path="/login" element={<Login />} />

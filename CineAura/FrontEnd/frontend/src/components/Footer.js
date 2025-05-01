@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const Footer = () => {
   return (
     <footer className="mt-auto py-4" style={{ 
@@ -28,11 +30,18 @@ const Footer = () => {
             </a>
             <a 
               href="/contact" 
-              className="text-decoration-none" 
+              className="text-decoration-none me-3" 
               style={{ color: '#ebd0ad' }}
             >
               Contact Us
             </a>
+            <Link 
+              to="/help"
+              className="text-decoration-none"
+              style={{ color: '#ebd0ad' }}
+            >
+              Help
+            </Link>
           </div>
         </div>
       </div>
@@ -41,4 +50,3 @@ const Footer = () => {
 };
 
 export default Footer;
-  
