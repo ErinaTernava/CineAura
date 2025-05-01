@@ -44,6 +44,25 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region GetById
+        public async Task<HallDTO> GetById(int id)
+        {
+            try
+            {
+                var movie = await _context.Hall.FirstOrDefaultAsync(x => x.Id == id);
+                if (movie == null)
+                {
+                    throw new KeyNotFoundException($"hall with ID {id} not found");
+                }
+                return movie.Adapt<HallDTO>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }
+        #endregion
 
 
     }

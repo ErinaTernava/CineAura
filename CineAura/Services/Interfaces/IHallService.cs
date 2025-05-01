@@ -8,6 +8,8 @@ namespace CineAura.Services.Interfaces
     public interface IHallService
     {
         Task<List<HallDTO>> GetByMovieId(int movieId);
-        
+        Task<HallDTO> GetById(int id);
+
+
     }
 }

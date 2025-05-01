@@ -14,11 +14,9 @@ const MoviePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Fetch movie details
         const movieResponse = await axios.get(`http://localhost:5283/api/Movie/getbyid?id=${id}`);
         setMovie(movieResponse.data);
         
-        // Determine status
         const today = new Date();
         const release = new Date(movieResponse.data.releaseDate);
         const end = new Date(movieResponse.data.endDate);
@@ -28,15 +26,13 @@ const MoviePage = () => {
         else {
           setStatus('Available');
           
-          // 2. Fetch all showtimes with hall information
           const showtimesResponse = await axios.get(`http://localhost:5283/api/Showtime/getByMovie?movieId=${id}`);
           
-          // Transform data to ensure hall information is properly included
           const formattedShowtimes = showtimesResponse.data.map(showtime => ({
             ...showtime,
             startTime: new Date(showtime.startTime),
             hallName: showtime.hall?.hallName || `Hall ${showtime.hallId}`,
-            hallType: showtime.hall?.hallType || 'Standard'
+            hallType: showtime.hall?.hallType || '2D'
           }));
           
           setShowtimes(formattedShowtimes);
@@ -85,7 +81,6 @@ const MoviePage = () => {
     }
   };
 
-  // Group showtimes by date
   const groupShowtimesByDate = () => {
     const grouped = {};
     
@@ -152,7 +147,6 @@ const MoviePage = () => {
             )}
           </div>
 
-          {/* Showtimes with Hall information section */}
           {status === 'Available' && (
             <div className="mt-5">
               <h4 className="mb-4" style={{ color: '#ebd0ad' }}>Available Showtimes</h4>

@@ -20,7 +20,7 @@ namespace CineAura.Services
 
        
 
-        #region GetByMovieAndHall
+        #region GetByMovie
         public async Task<List<ShowtimeDTO>> GetByMovie(int movieId)
         {
             try
@@ -43,6 +43,25 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region GetById
+        public async Task<ShowtimeDTO> GetById(int id)
+        {
+            try
+            {
+                var movie = await _context.Showtime.FirstOrDefaultAsync(x => x.Id == id);
+                if (movie == null)
+                {
+                    throw new KeyNotFoundException($"showtime with ID {id} not found");
+                }
+                return movie.Adapt<ShowtimeDTO>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }
+        #endregion
 
         #region Save
         public async Task<bool> Save(ShowtimeDTO showtime)
