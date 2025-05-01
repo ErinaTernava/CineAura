@@ -21,17 +21,17 @@ namespace CineAura.Services
        
 
         #region GetByMovieAndHall
-        public async Task<List<ShowtimeDTO>> GetByMovieAndHall(int movieId, int hallId)
+        public async Task<List<ShowtimeDTO>> GetByMovie(int movieId)
         {
             try
             {
                 var showtime = await _context.Showtime
-                    .Where(x => x.MovieId == movieId && x.HallId == hallId)
+                    .Where(x => x.MovieId == movieId)
                     .ToListAsync();
             
 
                 if (showtime == null)
-                    throw new KeyNotFoundException($"Showtime for Movie ID {movieId} and Hall ID {hallId} not found");
+                    throw new KeyNotFoundException($"Showtime for Movie ID {movieId} not found");
 
                 return showtime.Adapt<List<ShowtimeDTO>>();
             }

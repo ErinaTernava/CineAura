@@ -17,12 +17,12 @@ namespace CineAura.Controllers
         
 
         #region GetByMovieAndHall
-        [HttpGet("getByMovieAndHall")]
-        public async Task<IActionResult> GetByMovieAndHall(int movieId, int hallId)
+        [HttpGet("getByMovie")]
+        public async Task<IActionResult> GetByMovie(int movieId)
         {
             try
             {
-                var showtime = await _service.GetByMovieAndHall(movieId, hallId);
+                var showtime = await _service.GetByMovie(movieId);
                 if (showtime == null)
                     return NotFound();
 
