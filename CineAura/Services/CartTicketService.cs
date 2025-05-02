@@ -43,6 +43,41 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region AddMultipleToCart
+        public async Task<bool> AddMultipleToCart(int cartId, List<int> ticketIds, List<int> seatIds)
+        {
+            if (ticketIds.Count != seatIds.Count) return false;
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                for (int i = 0; i < ticketIds.Count; i++)
+                {
+                    var dto = new CartTicketDTO
+                    {
+                        CartId = cartId,
+                        TicketId = ticketIds[i],
+                        SeatId = seatIds[i]
+                    };
+
+                    if (!await AddTicket(dto))
+                    {
+                        await transaction.RollbackAsync();
+                        return false;
+                    }
+                }
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+        #endregion
+
         #region remove
         public async Task<bool> Remove(int ticketId)
         {

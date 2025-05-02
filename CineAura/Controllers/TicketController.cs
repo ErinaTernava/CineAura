@@ -1,4 +1,5 @@
 ﻿using CineAura.Data.DTO;
+using CineAura.Services;
 using CineAura.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +11,51 @@ namespace CineAura.Controllers
         public class TicketController : ControllerBase
         {
             private readonly ITicketService _service;
+            private readonly ICartTicketService _cartTicketService;
+            private readonly ICartService _cartService;
 
-            public TicketController(ITicketService ticketService)
+            public TicketController(ITicketService ticketService, ICartTicketService cartTicketService, ICartService cartService)
             {
                 _service = ticketService;
+                _cartService = cartService;
+                _cartTicketService = cartTicketService;
             }
+
+        #region AddToCart
+        [HttpPost("addtocart")]
+        public async Task<IActionResult> AddToCart( [FromQuery] int userId, [FromQuery] int showtimeId, [FromQuery] string seatIds) 
+        {
+            var seatIdList = seatIds.Split(',')
+                .Select(id => int.TryParse(id, out var num) ? num : -1)
+                .Where(id => id != -1)
+                .ToList();
+
+            if (!seatIdList.Any()) return BadRequest("Invalid seat IDs");
+
+            var cart = await _cartService.GetByUserId(userId);
+            if (cart == null) return BadRequest("Cart not found");
+
+            var ticketIds = new List<int>();
+            var successfulSeatIds = new List<int>();
+
+            foreach (var seatId in seatIdList)
+            {
+                var ticket = await _service.CreateTicket(userId, showtimeId, seatId);
+                if (ticket != null)
+                {
+                    ticketIds.Add(ticket.Id);
+                    successfulSeatIds.Add(seatId);
+                }
+            }
+
+            if (!ticketIds.Any()) return BadRequest("No seats available");
+
+            var success = await _cartTicketService.AddMultipleToCart(cart.Id, ticketIds, successfulSeatIds);
+            if (!success) return BadRequest("Failed to add to cart");
+
+            return Ok();
+        }
+        #endregion
 
         #region GetTicketsByUserId
         [HttpGet("ticketbyuser")]
