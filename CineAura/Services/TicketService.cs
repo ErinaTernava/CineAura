@@ -50,24 +50,43 @@ namespace CineAura.Services
         }
         #endregion
 
-        #region TicketByUserID
-        public async Task<List<TicketDTO?>> TicketByUserId(int id)
+        #region TicketByUserId
+        public async Task<List<TicketDTO>> TicketByUserId(int id)
         {
             try
             {
-                var ticket = await _context.Ticket
+                return await _context.Ticket
                     .Where(x => x.UserId == id)
-                    .ToListAsync();
+                    .Include(t => t.Showtime)
+                        .ThenInclude(s => s.Movie)
+                    .Include(t => t.Showtime)
+                        .ThenInclude(s => s.Hall)
+                    .Include(t => t.Seat)
+                    .Select(t => new TicketDTO
+                    {
+                        Id = t.Id,
+                        UserId = t.UserId,
+                        ShowtimeId = t.ShowtimeId,
+                        SeatId = t.SeatId,
+                        PurchaseTime = t.PurchaseTime,
+                        ShowtimeStartTime = t.Showtime.StartTime,
+                        TicketPrice = t.Showtime.TicketPrice,
+                        MovieTitle = t.Showtime.Movie.Title,
+                        MovieDuration = t.Showtime.Movie.Duration,
+                        HallName = t.Showtime.Hall.HallName,
+                        HallCapacity = t.Showtime.Hall.CapacityOfSeats,
+                        SeatNumber = t.Seat.SeatNumber,
+                        SeatRow = t.Seat.Row,
 
-                return ticket.Adapt<List<TicketDTO>>();
+                    })
+                    .ToListAsync();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new Exception("An error occurred");
+                throw new Exception("An error occurred while fetching user tickets");
             }
         }
-
         #endregion
 
         #region DeleteTicket 
@@ -89,6 +108,23 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region TakenSeats
+        public async Task<List<int>> GetTakenSeatIds(int showtimeId)
+        {
+            try
+            {
+                return await _context.Ticket
+                .Where(t => t.ShowtimeId == showtimeId)
+                .Select(t => t.SeatId)
+                .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }
+        #endregion
 
     }
 }

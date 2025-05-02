@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import useAuthToken from '../hooks/useAuthToken'; 
+import { jwtDecode } from 'jwt-decode';
 
 const SeatPicker = () => {
   const [hallSeats, setHallSeats] = useState([]);
@@ -11,6 +13,7 @@ const SeatPicker = () => {
   const [movie, setMovie] = useState(null);
   const [showtime, setShowtime] = useState(null);
   const [hall, setHall] = useState(null);
+  const { token } = useAuthToken();
   const navigate = useNavigate();
   const { search } = useLocation();
   const params = new URLSearchParams(search);
@@ -20,6 +23,43 @@ const SeatPicker = () => {
   const movieId = searchParams.get('movieId');
   const hallId = searchParams.get('hallId');
   const showtimeId = searchParams.get('showtimeId');
+  
+  const getUserId = () => {
+      if (!token) return null;
+      
+      const storedUserId = localStorage.getItem("userId");
+      if (storedUserId) return storedUserId;
+    
+      try {
+        const decodedToken = jwtDecode(token);
+        return decodedToken.nameid || decodedToken.sub || decodedToken.id || decodedToken.userId || null;
+      } catch (err) {
+        console.error('Error decoding token:', err);
+        return null;
+      }
+    };
+    const userId=getUserId();
+
+  useEffect(() => {
+    const fetchTakenSeats = async () => {
+      if (!showtimeId) return;
+      
+      try {
+        const response = await fetch(`http://localhost:5283/api/Ticket/takenseats?showtimeId=${showtimeId}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch taken seats');
+        }
+        const data = await response.json();
+        setBookedSeats(data);
+      } catch (err) {
+        console.error('Error fetching taken seats:', err);
+        setError(err.message);
+      }
+    };
+
+    fetchTakenSeats();
+  }, [showtimeId]);
+
   useEffect(() => {
     const fetchMovie = async () => {
       if (!movieId) return;
@@ -99,7 +139,7 @@ const SeatPicker = () => {
               seatNumber: seatNumber,
               row: row,
               position: i,
-              isAvailable: !bookedSeats.includes(seatId),
+              isAvailable: !bookedSeats.includes(seatNumber), 
               price: showtime ? showtime.ticketPrice : 4,
               type: viewType,
               movieTitle: movie ? movie.title : 'Unknown Movie',
@@ -135,28 +175,45 @@ const SeatPicker = () => {
     });
   };
 
-  const proceedToCart = () => {
+  const addToCart = async () => {
+    if (!getUserId) {
+      alert('Please log in to book tickets');
+      navigate('/login');
+      return;
+    }
+
     if (selectedSeats.length === 0) {
       alert('Please select at least one seat');
       return;
     }
-    
-    const tickets = selectedSeats.map(seat => ({
-      seatId: seat.id,
-      seatNumber: seat.seatNumber,
-      row: seat.row,
-      position: seat.position,
-      price: seat.price,
-      type: seat.type,
-      movieTitle: seat.movieTitle,
-      showtime: seat.showtime,
-      hallName: seat.hallName,
-      movieId: movieId,
-      showtimeId: showtimeId,
-      hallId: hallId
-    }));
-    
-    navigate('/cart', { state: { tickets } });
+
+    try {
+      const seatNumbers = selectedSeats.map(seat => seat.seatNumber);
+      const seatIdsParam = seatNumbers.join(',');
+
+      const response = await fetch(`http://localhost:5283/api/Ticket/addtocart?userId=${userId}&showtimeId=${showtimeId}&seatIds=${seatIdsParam}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to add tickets to cart');
+      }
+
+      const takenSeatsResponse = await fetch(`http://localhost:5283/api/Ticket/takenseats?showtimeId=${showtimeId}`);
+      if (takenSeatsResponse.ok) {
+        const updatedTakenSeats = await takenSeatsResponse.json();
+        setBookedSeats(updatedTakenSeats);
+      }
+
+      navigate('/cart');
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert(error.message);
+    }
   };
 
   if (loading) return (
@@ -347,7 +404,7 @@ const SeatPicker = () => {
             Total: ${selectedSeats.reduce((sum, seat) => sum + seat.price, 0).toFixed(2)}
           </p>
           <button 
-            onClick={proceedToCart} 
+            onClick={addToCart} 
             style={{
               background: '#ebd0ad',
               color: '#1a1a2e',
@@ -359,13 +416,12 @@ const SeatPicker = () => {
               marginTop: '15px',
               width: '100%',
               fontSize: '1rem',
-              transition: 'background 0.3s ease',
-              ':hover': {
-                background: '#d4b98c'
-              }
+              transition: 'background 0.3s ease'
             }}
+            onMouseOver={(e) => e.target.style.background = '#d4b98c'}
+            onMouseOut={(e) => e.target.style.background = '#ebd0ad'}
           >
-            Proceed to Cart
+            Add to Cart
           </button>
         </div>
       )}

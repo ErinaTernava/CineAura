@@ -7,10 +7,10 @@ const CartPage = () => {
   const { token } = useAuthToken();
   const navigate = useNavigate();
   const { state } = useLocation();
-  const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [temporaryTickets, setTemporaryTickets] = useState([]);
+  const [cartTickets, setCartTickets] = useState([]);
 
   const getUserId = () => {
     if (!token) return null;
@@ -27,16 +27,46 @@ const CartPage = () => {
     }
   };
 
-  useEffect(() => {
-    if (state?.tickets) {
-      setTemporaryTickets(state.tickets);
-      setLoading(false);
-      return;
+  const fetchUserTickets = async (userId) => {
+    try {
+      const response = await fetch(`http://localhost:5283/api/Ticket/ticketbyuser?userId=${userId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch user tickets');
+      }
+      
+      const ticketsData = await response.json();
+      return ticketsData.map(ticket => ({
+        id: ticket.id,
+        movie: ticket.movieTitle,
+        hall: ticket.hallName,
+        showtime: ticket.showtimeStartTime ? 
+          new Date(ticket.showtimeStartTime).toLocaleString() : 'Unknown Time',
+        seat: `${ticket.seatRow}${ticket.seatNumber}`,
+        price: ticket.ticketPrice || 0,
+        type: 'regular'
+      }));
+      
+    } catch (err) {
+      console.error('Error fetching user tickets:', err);
+      throw err;
     }
+  };
 
-    const fetchCart = async () => {
+  useEffect(() => {
+    const fetchData = async () => {
       setLoading(true);
       setError(null);
+
+      if (state?.tickets) {
+        setTemporaryTickets(state.tickets);
+        setLoading(false);
+        return;
+      }
 
       if (!token) {
         setLoading(false);
@@ -52,61 +82,28 @@ const CartPage = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5283/api/Cart/user?userId=${userId}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
-        });
+        const userTickets = await fetchUserTickets(userId);
+        setCartTickets(userTickets);
 
-        if (response.status === 404) {
-          const createResponse = await fetch(`http://localhost:5283/api/Cart/create?userId=${userId}`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            }
-          });
-          
-          if (!createResponse.ok) {
-            throw new Error('Error creating cart');
-          }
-          
-          const newCart = await createResponse.json();
-          setCart(newCart);
-        } else if (!response.ok) {
-          const errorText = await response.text();
-          throw new Error(`Error fetching cart: ${response.status} - ${errorText}`);
-        } else {
-          const cartData = await response.json();
-          setCart(cartData);
-        }
       } catch (err) {
-        console.error('Error in fetchCart:', err);
+        console.error('Fetch error:', err);
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCart();
+    fetchData();
   }, [token, navigate, state]);
 
   const handleRemoveTicket = async (ticketId) => {
     try {
       if (temporaryTickets.length > 0) {
-        setTemporaryTickets(prev => prev.filter(t => 
-          t.seatId !== ticketId
-        ));
+        setTemporaryTickets(prev => prev.filter(t => t.seatId !== ticketId));
         return;
       }
 
-      if (!cart?.id) {
-        throw new Error('No cart available');
-      }
-
-      const response = await fetch(`http://localhost:5283/api/CartTicket/remove?ticketId=${ticketId}`, {
+      const response = await fetch(`http://localhost:5283/api/Ticket/remove?ticketId=${ticketId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -118,93 +115,9 @@ const CartPage = () => {
         throw new Error(`Failed to remove ticket: ${errorText}`);
       }
 
-      setCart(prevCart => ({
-        ...prevCart,
-        cartTickets: prevCart.cartTickets.filter(ticket => ticket.id !== ticketId),
-      }));
+      setCartTickets(prev => prev.filter(t => t.id !== ticketId));
     } catch (err) {
       console.error('Error removing ticket:', err);
-      setError(err.message);
-    }
-  };
-
-  const handleCheckout = async () => {
-    try {
-      if (temporaryTickets.length > 0) {
-        const userId = getUserId();
-        if (!userId) {
-          throw new Error('User not identified');
-        }
-
-        const createResponse = await fetch(`http://localhost:5283/api/Cart/create?userId=${userId}`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          }
-        });
-        
-        if (!createResponse.ok) {
-          throw new Error('Error creating cart');
-        }
-        
-        const newCart = await createResponse.json();
-
-        for (const ticket of temporaryTickets) {
-          const addResponse = await fetch(`http://localhost:5283/api/CartTicket/add`, {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              cartId: newCart.id,
-              seatId: ticket.seatId,
-              showtimeId: ticket.showtimeId,
-              price: ticket.price
-            })
-          });
-
-          if (!addResponse.ok) {
-            throw new Error('Error adding ticket to cart');
-          }
-        }
-
-        const paymentResponse = await fetch(`http://localhost:5283/api/Cart/pay?cartId=${newCart.id}`, {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        if (!paymentResponse.ok) {
-          const errorText = await paymentResponse.text();
-          throw new Error(`Payment failed: ${errorText}`);
-        }
-
-        navigate('/payment-success');
-        return;
-      }
-
-      if (!cart?.id) {
-        throw new Error('No cart available for checkout');
-      }
-
-      const response = await fetch(`http://localhost:5283/api/Cart/pay?cartId=${cart.id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Payment failed: ${errorText}`);
-      }
-
-      navigate('/payment-success');
-    } catch (err) {
-      console.error('Checkout error:', err);
       setError(err.message);
     }
   };
@@ -214,39 +127,20 @@ const CartPage = () => {
       return temporaryTickets.map(ticket => ({
         id: ticket.seatId,
         movie: ticket.movieTitle,
-        showtime: ticket.showtime,
         hall: ticket.hallName,
+        showtime: ticket.showtime,
         seat: `${ticket.row}${ticket.position}`,
-        price: ticket.price,
-        type: ticket.type || 'regular',
-        movieId: ticket.movieId,
-        showtimeId: ticket.showtimeId,
-        hallId: ticket.hallId
+        price: ticket.price || 0,
+        type: 'regular'
       }));
     }
-  
-    if (cart?.cartTickets) {
-      return cart.cartTickets.map(ticket => ({
-        id: ticket.id,
-        movie: ticket.showtime?.movie?.title || 'Unknown Movie',
-        showtime: ticket.showtime?.startTime ? 
-          new Date(ticket.showtime.startTime).toLocaleString() : 'Unknown Time',
-        hall: ticket.showtime?.hall?.hallName || 'Unknown Hall',
-        seat: ticket.seat?.number || 'Unknown Seat',
-        price: ticket.price,
-        type: ticket.type || 'regular',
-        movieId: ticket.showtime?.movieId,
-        showtimeId: ticket.showtimeId,
-        hallId: ticket.showtime?.hallId
-      }));
-    }
-  
-    return [];
+    
+    return cartTickets;
   };
 
   const calculateTotal = () => {
     const tickets = getTicketsToDisplay();
-    return tickets.reduce((sum, ticket) => sum + ticket.price, 0);
+    return tickets.reduce((sum, ticket) => sum + (ticket.price || 0), 0);
   };
 
   if (loading) {
@@ -359,7 +253,7 @@ const CartPage = () => {
             <p>Hall: {ticket.hall}</p>
             <p>Showtime: {ticket.showtime}</p>
             <p>Seat: {ticket.seat}</p>
-            <p>Price: ${ticket.price.toFixed(2)}</p>
+            <p>Price: ${(ticket.price || 0).toFixed(2)}</p>
             <button
               style={{
                 padding: '5px 10px',
@@ -396,9 +290,7 @@ const CartPage = () => {
             borderRadius: '4px',
             cursor: 'pointer',
             fontWeight: 'bold'
-          }}
-          onClick={handleCheckout}
-        >
+          }}>
           Proceed to Payment
         </button>
       </div>
