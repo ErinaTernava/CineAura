@@ -50,11 +50,12 @@ const Login = () => {
     }
   };
 
+
+
   return (
+    
     <div style={{ backgroundColor: '#0b1214', minHeight: '100vh' }}>
-      <div className="d-flex justify-content-center align-items-center py-5">
-        <div className="col-md-5 p-4 rounded" style={{ backgroundColor: '#1a252f' }}>
-        <img 
+      <img 
           src="/Images/CineAura.png" 
           alt="CineAura Logo"
           onClick={() => navigate('/')}
@@ -65,7 +66,8 @@ const Login = () => {
             margin: '0 auto 20px auto'
           }}
         />
-
+      <div className="d-flex justify-content-center align-items-center py-5">
+        <div className="col-md-5 p-4 rounded" style={{ backgroundColor: '#1a252f' }}>
           <h2 className="text-center mb-4" style={{ color: '#ebd0ad' }}>Login</h2>
 
           <form onSubmit={handleLogin}>
