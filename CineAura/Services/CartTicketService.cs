@@ -78,7 +78,7 @@ namespace CineAura.Services
         }
         #endregion
 
-        #region remove
+        #region Remove
         public async Task<bool> Remove(int ticketId)
         {
             try

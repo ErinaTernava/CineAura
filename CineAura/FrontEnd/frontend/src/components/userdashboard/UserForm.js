@@ -6,8 +6,8 @@ const UserForm = ({ formData, setFormData, handleSubmit }) => {
       <div style={{ 
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '30px', 
-        marginBottom: '30px'  
+        gap: '0px', 
+        marginBottom: '0px'  
       }}>
         <div>
           <label style={{ 

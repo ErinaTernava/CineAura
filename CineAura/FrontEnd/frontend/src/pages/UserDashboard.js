@@ -42,7 +42,7 @@ const UserDashboard = () => {
   }
 
   return (
-    <div style={{ backgroundColor: '#0b1214', minHeight: '100vh', display: 'flex' }}>
+    <div style={{ backgroundColor: '#0b1214', minHeight: '70vh', display: 'flex' }}>
       <Sidebar 
         userEmail={userData?.email} 
         activeTab={activeTab} 
@@ -50,7 +50,7 @@ const UserDashboard = () => {
         setShowDeleteConfirm={setShowDeleteConfirm}
       />
       
-      <div style={{ flex: 1, padding: '30px' }}>
+      <div style={{ flex: 1, padding: '70px' }}>
         {message.text && <MessageAlert message={message} />}
 
         {activeTab === 'profile' && (

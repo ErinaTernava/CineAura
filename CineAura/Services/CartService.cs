@@ -36,7 +36,6 @@ namespace CineAura.Services
         #endregion
 
         #region Create
-
         public async Task<CartDTO?> Create(int userId)
         {
             try
@@ -67,7 +66,6 @@ namespace CineAura.Services
         #endregion
 
         #region MarkCartAsPaid
-
         public async Task<bool> MarkCartAsPaid(int cartId)
         {
             try
@@ -89,7 +87,6 @@ namespace CineAura.Services
         #endregion
 
         #region Delete
-
         public async Task<bool> Delete(int cartId)
         {
             try
@@ -109,6 +106,5 @@ namespace CineAura.Services
             }
         }
         #endregion
-
     }
 }

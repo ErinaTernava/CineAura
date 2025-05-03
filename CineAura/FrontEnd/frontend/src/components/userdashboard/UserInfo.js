@@ -2,12 +2,12 @@ import { FiMail } from 'react-icons/fi';
 
 const UserInfo = ({ userData }) => {
   return (
-    <div style={{ marginTop: '50px' }}>
+    <div style={{ marginTop: '40px' }}>
       <div style={{ 
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
-        gap: '40px', 
-        marginBottom: '40px'  
+        gap: '0px', 
+        marginBottom: '30px'  
       }}>
         <div>
           <h3 style={{ 

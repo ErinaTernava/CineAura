@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-
 import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
@@ -22,21 +22,28 @@ const SearchBar = ({ onSearch }) => {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         style={{
-          backgroundColor: '#1a1a2e',
+          backgroundColor: '#0b1214',
           color: '#ebd0ad',
-          border: '1px solid #2c3e50',
+          border: '1px solid #ebd0ad',
+          borderRadius: '30px',
+          width: '100%',
+          marginRight: '8px',
         }}
       />
-      <button
+       <button
         type="submit"
         className="btn"
         style={{
-          backgroundColor: '#ebd0ad',
-          color: '#0b1214',
-          fontWeight: 'bold',
+          backgroundColor: '#0b1214',
+          border: 'none',
+          padding: '6px 10px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '50%',
         }}
       >
-        Search
+        <FaSearch color="#ebd0ad" size={20} />
       </button>
     </form>
   );

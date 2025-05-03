@@ -22,20 +22,7 @@ namespace CineAura.Services
             try
             {
                 var movies = await _context.Movie.ToListAsync();
-
-                var movieDTOs = movies.Select(m => new MovieDTO
-                {
-                    Id = m.Id,
-                    Title = m.Title,
-                    Description = m.Description,
-                    Duration = m.Duration,
-                    ReleaseDate = m.ReleaseDate,
-                    EndDate = m.EndDate,
-                    Photo = m.Photo,
-                    GenreId = m.GenreId
-                }).ToList();
-
-                return movieDTOs;
+                return movies.Adapt<List<MovieDTO>>();
             }
             catch (Exception ex)
             {
@@ -43,7 +30,6 @@ namespace CineAura.Services
                 throw new Exception("An error occurred while retrieving movies.");
             }
         }
-
         #endregion
 
         #region GetById
@@ -53,9 +39,8 @@ namespace CineAura.Services
             {
                 var movie = await _context.Movie.FirstOrDefaultAsync(x => x.Id == id);
                 if (movie == null)
-                {
                     throw new KeyNotFoundException($"Movie with ID {id} not found");
-                }
+
                 return movie.Adapt<MovieDTO>();
             }
             catch (Exception ex)
@@ -67,7 +52,6 @@ namespace CineAura.Services
         #endregion
 
         #region GetByGenre
-
         public async Task<List<MovieDTO>> GetByGenre(int genreId)
         {
             try
@@ -84,7 +68,6 @@ namespace CineAura.Services
                 throw new Exception("An error occurred");
             }
         }
-
         #endregion
 
         #region Save
@@ -138,14 +121,10 @@ namespace CineAura.Services
         {
             try
             {
-                
                 var moviesQuery = _context.Movie.AsQueryable();
 
-                if (!string.IsNullOrEmpty(query))
-                {
-                    
+                if (!string.IsNullOrEmpty(query))  
                     moviesQuery = moviesQuery.Where(m => m.Title.Contains(query));
-                }
 
                 var result = await moviesQuery.ToListAsync();
 
@@ -153,16 +132,10 @@ namespace CineAura.Services
             }
             catch (Exception ex)
             {
-               
-                Console.WriteLine($"Error in SearchMovies: {ex.Message}");
-
-                
+                Console.WriteLine($"Error in SearchMovies: {ex.Message}"); 
                 throw new Exception("An error occurred while searching for movies.");
             }
         }
-
-
-
         #endregion
 
         #region Delete

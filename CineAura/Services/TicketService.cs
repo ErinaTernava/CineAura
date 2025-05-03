@@ -77,7 +77,6 @@ namespace CineAura.Services
                         HallCapacity = t.Showtime.Hall.CapacityOfSeats,
                         SeatNumber = t.Seat.SeatNumber,
                         SeatRow = t.Seat.Row,
-
                     })
                     .ToListAsync();
             }
@@ -125,6 +124,5 @@ namespace CineAura.Services
             }
         }
         #endregion
-
     }
 }

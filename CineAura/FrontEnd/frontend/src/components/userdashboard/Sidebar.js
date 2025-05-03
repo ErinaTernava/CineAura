@@ -3,13 +3,14 @@ import { FiUser, FiKey, FiTrash2, FiChevronRight, FiUserPlus } from 'react-icons
 const Sidebar = ({ userEmail, activeTab, setActiveTab, setShowDeleteConfirm }) => {
   return (
     <div style={{ 
-      width: '250px',
+      width: '220px',
       backgroundColor: '#1a252f',
       borderRight: '1px solid #ebd0ad',
-      padding: '20px',
+      padding: '15px',
       display: 'flex',
       flexDirection: 'column',
       position: 'sticky',
+      margin: -40,
       top: 0
     }}>
       <div style={{ 
@@ -17,7 +18,7 @@ const Sidebar = ({ userEmail, activeTab, setActiveTab, setShowDeleteConfirm }) =
         borderBottom: '1px solid #ebd0ad',
         marginBottom: '20px'
       }}>
-        <h2 style={{ color: '#ebd0ad', fontSize: '1.2rem', fontWeight: 'bold' }}>
+        <h2 style={{ color: '#ebd0ad', fontSize: '1.2rem', fontWeight: 'bold', marginTop: '20px' }}>
           <FiUserPlus style={{ marginRight: '10px' }} />
           User Panel
         </h2>
@@ -82,7 +83,7 @@ const Sidebar = ({ userEmail, activeTab, setActiveTab, setShowDeleteConfirm }) =
           border: 'none',
           cursor: 'pointer',
           textAlign: 'left',
-          marginTop: '10px'
+          marginTop: '0px'
         }}
       >
         <FiTrash2 style={{ marginRight: '10px' }} />
