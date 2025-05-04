@@ -1,4 +1,5 @@
 using CineAura.Data;
+using CineAura.Models;
 using CineAura.Services;
 using CineAura.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,11 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod();
     });
 });
+
+//stripe 
+// Configure Stripe
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 var app = builder.Build();
 

@@ -21,5 +21,6 @@ namespace CineAura.Models
         public Seat Seat { get; set; }
 
         public DateTime PurchaseTime { get; set; }
+        public int? OrderId { get; set; }
     }
 }

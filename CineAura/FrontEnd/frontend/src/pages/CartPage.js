@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAuthToken from '../hooks/useAuthToken';
 import { jwtDecode } from 'jwt-decode';
+import { loadStripe } from '@stripe/stripe-js';
+
 
 const CartPage = () => {
   const { token } = useAuthToken();
@@ -11,6 +13,7 @@ const CartPage = () => {
   const [error, setError] = useState(null);
   const [temporaryTickets, setTemporaryTickets] = useState([]);
   const [cartTickets, setCartTickets] = useState([]);
+  const [stripe, setStripe] = useState(null); 
 
   const getUserId = () => {
     if (!token) return null;
@@ -94,6 +97,12 @@ const CartPage = () => {
     };
 
     fetchData();
+    const loadStripeInstance = async () => {
+      const stripeInstance = await loadStripe('pk_test_51RKmRI2UNUC7EBJS2QfsKLle0a1utXhhgNvxYog1cN0CuHLWkS3WsfHPGO2Ust0NDyeTHGL8NVLhWHQiNH9QQI0f00t8fHz0Pv');
+      setStripe(stripeInstance);
+    };
+
+    loadStripeInstance();
   }, [token, navigate, state]);
 
   const handleRemoveTicket = async (ticketId) => {
@@ -141,6 +150,37 @@ const CartPage = () => {
   const calculateTotal = () => {
     const tickets = getTicketsToDisplay();
     return tickets.reduce((sum, ticket) => sum + (ticket.price || 0), 0);
+  };
+
+   const handleProceedToPayment = async () => {
+    const userId = getUserId();
+    if (!userId) {
+      alert('Please log in first.');
+      return;
+    }
+
+    try {
+      const userId = getUserId();
+      const response = await fetch(`http://localhost:5283/api/Payment/create-checkout-session?userId=${userId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ userId })
+      });
+       if (!response.ok) {
+        throw new Error('Failed to create checkout session');
+      }
+
+      const data = await response.json();
+      const sessionUrl = data.url;
+
+      window.location.href = sessionUrl;
+    } catch (err) {
+      console.error('Error initiating payment:', err);
+      setError('Failed to initiate payment.');
+    }
   };
 
   if (loading) {
@@ -281,7 +321,7 @@ const CartPage = () => {
         alignItems: 'center'
       }}>
         <h3 style={{ margin: 0 }}>Total: ${calculateTotal().toFixed(2)}</h3>
-        <button 
+        <button onClick={handleProceedToPayment}
           style={{
             padding: '10px 20px',
             backgroundColor: '#ebd0ad',

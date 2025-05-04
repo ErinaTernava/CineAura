@@ -42,7 +42,7 @@ const UserDashboard = () => {
   }
 
   return (
-    <div style={{ backgroundColor: '#0b1214', minHeight: '70vh', display: 'flex' }}>
+    <div style={{ backgroundColor: '#0b1214', minHeight: '60vh', display: 'flex' }}>
       <Sidebar 
         userEmail={userData?.email} 
         activeTab={activeTab} 

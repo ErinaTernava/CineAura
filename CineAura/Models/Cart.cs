@@ -11,9 +11,10 @@ namespace CineAura.Models
         public int UserId { get; set; }
         public User User { get; set; }
 
-        [Required]
-       
-        public bool IsPaid { get; set; } = false; 
+        [Required]       
+        public bool IsPaid { get; set; } = false;
+        public List<CartTicket> CartTicket { get; set; }
+
 
     }
 }

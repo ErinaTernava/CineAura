@@ -61,7 +61,6 @@ namespace CineAura.Services
         }
         #endregion
 
-
         #region Login
         public async Task<string> Login(UserLoginDTO request)
         {
