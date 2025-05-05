@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 //lidhja me databazen
 builder.Services.AddDbContext<AppDbContext>(options =>
    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -32,8 +31,8 @@ builder.Services.AddCors(options =>
 
 //stripe 
 // Configure Stripe
-builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
-Stripe.StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
+Stripe.StripeConfiguration.ApiKey = builder.Configuration["StripeSettings:SecretKey"];
 
 var app = builder.Build();
 

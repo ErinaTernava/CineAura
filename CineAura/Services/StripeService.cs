@@ -70,7 +70,12 @@ namespace CineAura.Services
                 if (stripeEvent.Type == "checkout.session.completed")
                 {
                     var session = stripeEvent.Data.Object as Session;
-                    var customerEmail = session.CustomerEmail;
+                    var customerEmail = session?.CustomerEmail;
+                    if (string.IsNullOrEmpty(customerEmail))
+                    {
+                        Console.WriteLine("⚠️ Customer email is null in session.");
+                        return;
+                    }
                     var sessionId = session.Id;
 
                     var user = await _context.User.FirstOrDefaultAsync(u => u.Email == customerEmail);
@@ -83,7 +88,7 @@ namespace CineAura.Services
                     {
                         UserId = user.Id,
                         CreatedAt = DateTime.UtcNow,
-                        StripeSessionId = sessionId
+                        StripeSessionId = sessionId,                       
                     };
                     _context.Order.Add(order);
                     await _context.SaveChangesAsync();
