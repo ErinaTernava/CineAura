@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 
 const TermsAndConditionsPage = () => {
   return (
-    <div className="container-fluid py-4 min-vh-100" style={{ backgroundColor: '#0b1214' }}>
+    <div className="container-fluid py-4 min-vh-100" style={{ backgroundColor: '#1a252f' }}>
       <div className="row justify-content-center">
         <div className="col-lg-10 col-xl-8">
           <div className="card shadow-lg" style={{ 
             backgroundColor: '#0b1214', 
             borderColor: '#2c3e50',
-            minHeight: '80vh'
+            minHeight: '70vh'
           }}>
             <div className="card-header py-3" style={{ 
               backgroundColor: '#1a1a2e', 

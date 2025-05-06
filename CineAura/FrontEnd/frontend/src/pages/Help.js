@@ -2,7 +2,7 @@ import React from 'react';
 
 const HelpPage = () => {
   return (
-    <div className="container-fluid py-4 min-vh-100" style={{ backgroundColor: '#0b1214' }}>
+    <div className="container-fluid py-4 min-vh-100" style={{ backgroundColor: '#1a252f' }}>
       <div className="row justify-content-center">
         <div className="col-lg-10 col-xl-8">
           <div className="card shadow-lg" style={{ 
