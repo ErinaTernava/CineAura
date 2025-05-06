@@ -9,7 +9,10 @@ const Login = () => {
   const { token } = useAuthToken();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [errorFields, setErrorFields] = useState({ email: false, password: false });
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     if (token) {
@@ -40,12 +43,12 @@ const Login = () => {
 
       window.location.reload(); 
     } catch (err) {
-      if (err.response) {
-        console.log('Error Response:', err.response);
-        alert(`Error: ${err.response.data.message || 'Invalid credentials'}`);
+      if (err.response && err.response.status === 400) {
+        setErrorMessage(err.response.data.message || 'Invalid credentials');
+        setErrorFields({ email: true, password: true });
       } else {
-        console.log('Error:', err);
-        alert('An error occurred');
+        setErrorMessage('Invalid email or password');
+        setErrorFields({ email: true, password: true });
       }
     }
   };
@@ -76,34 +79,48 @@ const Login = () => {
               <input
                 type="email"
                 id="loginEmail"
-                className="form-control form-control-lg"
+                className={`form-control form-control-lg ${errorFields.email ? 'is-invalid' : ''}`}
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrorFields({ ...errorFields, email: false });
+                  setErrorMessage('');
+                }}
                 placeholder="Enter your email address"
-                style={{ 
-                  backgroundColor: '#1a252f', 
-                  borderColor: '#ebd0ad', 
-                  color: 'white' 
+                style={{
+                  backgroundColor: '#1a252f',
+                  borderColor: errorFields.email ? 'red' : '#ebd0ad',
+                  color: 'white'
                 }}
                 required
               />
+
             </div>
             <div className="mb-3">
               <label htmlFor="loginPassword" className="form-label" style={{ color: '#ebd0ad' }}>Password</label>
               <input
                 type="password"
                 id="loginPassword"
-                className="form-control form-control-lg"
+                className={`form-control form-control-lg ${errorFields.password ? 'is-invalid' : ''}`}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrorFields({ ...errorFields, password: false });
+                  setErrorMessage('');
+                }}
                 placeholder="Enter your password"
-                style={{ 
-                  backgroundColor: '#1a252f', 
-                  borderColor: '#ebd0ad', 
-                  color: 'white' 
+                style={{
+                  backgroundColor: '#1a252f',
+                  borderColor: errorFields.password ? 'red' : '#ebd0ad',
+                  color: 'white'
                 }}
                 required
               />
+            {errorMessage && (
+              <div className="text-danger mt-2" style={{ fontSize: '0.9rem' }}>
+                {errorMessage}
+              </div>
+            )}
             </div>
             <button 
               type="submit" 
