@@ -109,22 +109,26 @@ const CartPage = () => {
     try {
       if (temporaryTickets.length > 0) {
         setTemporaryTickets(prev => prev.filter(t => t.seatId !== ticketId));
-        return;
+      } else {
+        const response = await fetch(`http://localhost:5283/api/Ticket/remove?ticketId=${ticketId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed to remove ticket: ${errorText}`);
+        }
+  
+        setCartTickets(prev => prev.filter(t => t.id !== ticketId));
+          const userId = getUserId();
+        if (userId) {
+          const userTickets = await fetchUserTickets(userId);
+          setCartTickets(userTickets);
+        }
       }
-
-      const response = await fetch(`http://localhost:5283/api/Ticket/remove?ticketId=${ticketId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Failed to remove ticket: ${errorText}`);
-      }
-
-      setCartTickets(prev => prev.filter(t => t.id !== ticketId));
     } catch (err) {
       console.error('Error removing ticket:', err);
       setError(err.message);

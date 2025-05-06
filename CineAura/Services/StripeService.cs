@@ -73,7 +73,7 @@ namespace CineAura.Services
                     var customerEmail = session?.CustomerEmail;
                     if (string.IsNullOrEmpty(customerEmail))
                     {
-                        Console.WriteLine("⚠️ Customer email is null in session.");
+                        Console.WriteLine("Customer email is null in session.");
                         return;
                     }
                     var sessionId = session.Id;
@@ -82,24 +82,28 @@ namespace CineAura.Services
                     var cart = await _context.Carts
                         .Include(c => c.CartTicket)
                         .ThenInclude(ct => ct.Ticket)
-                        .FirstOrDefaultAsync(c => c.UserId == user.Id && !c.IsPaid);
+                        .ThenInclude(t => t.Showtime)
+                        .FirstOrDefaultAsync(c => c.UserId == user.Id && !c.IsPaid);                    
 
-                    var order = new Order
+                    if (cart != null)
                     {
-                        UserId = user.Id,
-                        CreatedAt = DateTime.UtcNow,
-                        StripeSessionId = sessionId,                       
-                    };
-                    _context.Order.Add(order);
-                    await _context.SaveChangesAsync();
+                        var total = cart.CartTicket.Sum(ct => ct.Ticket.Showtime.TicketPrice);
 
-                    foreach (var ct in cart.CartTicket)
-                    {
-                        ct.Ticket.OrderId = order.Id;
+                        var order = new Order
+                        {
+                            UserId = user.Id,
+                            StripeSessionId = sessionId,
+                            TotalAmount = total,
+                            CreatedAt = DateTime.UtcNow,
+                            CartId = cart.Id
+                        };
+                        _context.Order.Add(order);
+
+                        _context.CartTicket.RemoveRange(cart.CartTicket);
+
+                        cart.IsPaid = true;
+                        _context.SaveChanges();
                     }
-
-                    cart.IsPaid = true;
-                    await _context.SaveChangesAsync();
                 }
             }
             catch (Exception e)
