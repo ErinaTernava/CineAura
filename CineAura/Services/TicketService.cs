@@ -55,30 +55,33 @@ namespace CineAura.Services
         {
             try
             {
-                return await _context.Ticket
-                    .Where(x => x.UserId == id)
-                    .Include(t => t.Showtime)
-                        .ThenInclude(s => s.Movie)
-                    .Include(t => t.Showtime)
-                        .ThenInclude(s => s.Hall)
-                    .Include(t => t.Seat)
-                    .Select(t => new TicketDTO
-                    {
-                        Id = t.Id,
-                        UserId = t.UserId,
-                        ShowtimeId = t.ShowtimeId,
-                        SeatId = t.SeatId,
-                        PurchaseTime = t.PurchaseTime,
-                        ShowtimeStartTime = t.Showtime.StartTime,
-                        TicketPrice = t.Showtime.TicketPrice,
-                        MovieTitle = t.Showtime.Movie.Title,
-                        MovieDuration = t.Showtime.Movie.Duration,
-                        HallName = t.Showtime.Hall.HallName,
-                        HallCapacity = t.Showtime.Hall.CapacityOfSeats,
-                        SeatNumber = t.Seat.SeatNumber,
-                        SeatRow = t.Seat.Row,
-                    })
-                    .ToListAsync();
+                return await _context.CartTicket
+                   .Where(ct => ct.Cart.UserId == id && !ct.Cart.IsPaid)
+                   .Include(ct => ct.Ticket)
+                   .ThenInclude(t => t.Showtime)
+                   .ThenInclude(s => s.Movie)
+                   .Include(ct => ct.Ticket)
+                   .ThenInclude(t => t.Showtime)
+                   .ThenInclude(s => s.Hall)
+                   .Include(ct => ct.Ticket)
+                   .ThenInclude(t => t.Seat)
+                   .Select(ct => new TicketDTO
+            {
+                Id = ct.Ticket.Id,
+                UserId = ct.Ticket.UserId,
+                ShowtimeId = ct.Ticket.ShowtimeId,
+                SeatId = ct.Ticket.SeatId,
+                PurchaseTime = ct.Ticket.PurchaseTime,
+                ShowtimeStartTime = ct.Ticket.Showtime.StartTime,
+                TicketPrice = ct.Ticket.Showtime.TicketPrice,
+                MovieTitle = ct.Ticket.Showtime.Movie.Title,
+                MovieDuration = ct.Ticket.Showtime.Movie.Duration,
+                HallName = ct.Ticket.Showtime.Hall.HallName,
+                HallCapacity = ct.Ticket.Showtime.Hall.CapacityOfSeats,
+                SeatNumber = ct.Ticket.Seat.SeatNumber,
+                SeatRow = ct.Ticket.Seat.Row
+            })
+            .ToListAsync();
             }
             catch (Exception ex)
             {
