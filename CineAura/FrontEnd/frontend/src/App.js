@@ -12,6 +12,12 @@ import Help from './pages/Help';
 import SearchResultPage from './pages/SearchResultPage'; 
 import SuccessPage from './pages/SuccessPage';
 import CancelPage from './pages/CancelPage';
+import AdminLayout from './components/admin/AdminLayout';
+import MoviesPage from './pages/admin/MoviePage';
+import AddMoviePage from './pages/admin/AddMoviePage';
+import UsersPage from './pages/admin/UsersPage';
+import EditMoviePage from './pages/admin/EditMoviePage';
+
 
 function App() {
   return (
@@ -26,7 +32,14 @@ function App() {
               <Route path="/help" element={<Help />} />
               <Route path="/search" element={<SearchResultPage />} />
               <Route path="/success" element={<SuccessPage/>}/>
-              <Route path="/cancel" element={<CancelPage/>}/>
+              <Route path="/cancel" element={<CancelPage />} />
+              <Route path="admin" element={<AdminLayout />}>
+                  <Route index element={<MoviesPage />} />
+                  <Route path="movies" element={<MoviesPage />} />
+                  <Route path="add-movie" element={<AddMoviePage />} />
+                  <Route path="users" element={<UsersPage />} />
+                  <Route path="movies/edit/:id" element={<EditMoviePage />} />
+              </Route>   
               
       </Route>
             <Route path="/login" element={<Login />} />
