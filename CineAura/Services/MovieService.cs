@@ -90,13 +90,13 @@ namespace CineAura.Services
         #endregion
 
         #region Update
-        public async Task<bool> Update(int id, MovieDTO movie)
+        public async Task<MovieDTO> Update(int id, MovieDTO movie)
         {
             try
             {
                 var obj = _context.Movie.FirstOrDefault(x => x.Id == id);
                 if (obj == null)
-                    return false;
+                    return null;
 
                 obj.Title = movie.Title;
                 obj.Description = movie.Description;
@@ -104,9 +104,10 @@ namespace CineAura.Services
                 obj.ReleaseDate = movie.ReleaseDate;
                 obj.EndDate = movie.EndDate;
                 obj.GenreId = movie.GenreId;
-                var result = await _context.SaveChangesAsync();
+                obj.Photo = movie.Photo;
+                await _context.SaveChangesAsync();
 
-                return result > 0;
+                return obj.Adapt<MovieDTO>();
             }
             catch (Exception ex)
             {
