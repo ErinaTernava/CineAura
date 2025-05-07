@@ -10,6 +10,8 @@ import CartPage from './pages/CartPage';
 import UserDashboard from './pages/UserDashboard';
 import Help from './pages/Help';
 import SearchResultPage from './pages/SearchResultPage'; 
+import SuccessPage from './pages/SuccessPage';
+import CancelPage from './pages/CancelPage';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/help" element={<Help />} />
               <Route path="/search" element={<SearchResultPage />} />
+              <Route path="/success" element={<SuccessPage/>}/>
+              <Route path="/cancel" element={<CancelPage/>}/>
               
       </Route>
             <Route path="/login" element={<Login />} />
