@@ -1,0 +1,109 @@
+import React from 'react';
+import { Link, Outlet } from 'react-router-dom';
+import { FiFilm, FiPlusSquare, FiUsers, FiLogOut, FiSettings } from 'react-icons/fi';
+
+const AdminLayout = () => {
+  return (
+    <div className="d-flex">
+      <div style={{ 
+        width: '220px',
+        backgroundColor: '#1a252f',
+        borderRight: '1px solid #ebd0ad',
+        padding: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'sticky',
+        top: 0,
+        margin: -40,
+        height: '100vh'
+      }}>
+        <div style={{ 
+          paddingBottom: '25px',
+          borderBottom: '1px solid #ebd0ad',
+          marginBottom: '25px'
+        }}>
+          <h2 style={{ 
+            color: '#ebd0ad', 
+            fontSize: '1.3rem', 
+            fontWeight: '600', 
+            marginTop: '10px',
+            display: 'flex',
+            alignItems: 'center'
+          }}>
+            <FiSettings style={{ marginRight: '12px' }} />
+            Admin Dashboard
+          </h2>
+        </div>
+        <nav style={{ flex: 1 }}>
+          <Link 
+            to="/admin/movies"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              padding: '12px 15px',
+              marginBottom: '8px',
+              borderRadius: '6px',
+              backgroundColor: window.location.pathname.includes('/movies') ? '#2c3e50' : 'transparent',
+              color: window.location.pathname.includes('/movies') ? '#ebd0ad' : '#ffffff',
+              textDecoration: 'none',
+              transition: 'all 0.2s'
+            }}
+          >
+            <FiFilm style={{ marginRight: '12px', fontSize: '1.1rem' }} />
+            View Movies
+          </Link>
+
+          <Link 
+            to="/admin/add-movie"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              padding: '12px 15px',
+              marginBottom: '8px',
+              borderRadius: '6px',
+              backgroundColor: window.location.pathname.includes('/add-movie') ? '#2c3e50' : 'transparent',
+              color: window.location.pathname.includes('/add-movie') ? '#ebd0ad' : '#ffffff',
+              textDecoration: 'none',
+              transition: 'all 0.2s'
+            }}
+          >
+            <FiPlusSquare style={{ marginRight: '12px', fontSize: '1.1rem' }} />
+            Add Movie
+          </Link>
+
+          <Link 
+            to="/admin/users"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              width: '100%',
+              padding: '12px 15px',
+              marginBottom: '8px',
+              borderRadius: '6px',
+              backgroundColor: window.location.pathname.includes('/users') ? '#2c3e50' : 'transparent',
+              color: window.location.pathname.includes('/users') ? '#ebd0ad' : '#ffffff',
+              textDecoration: 'none',
+              transition: 'all 0.2s'
+            }}
+          >
+            <FiUsers style={{ marginRight: '12px', fontSize: '1.1rem' }} />
+            Manage Users
+          </Link>
+        </nav>       
+      </div>
+      <div style={{ 
+        flex: 1,
+        padding: '30px',
+        marginLeft: '250px',
+        backgroundColor: '#0b1214',
+        minHeight: '40vh'
+      }}>
+        <Outlet />
+      </div>
+    </div>
+  );
+};
+
+export default AdminLayout;
