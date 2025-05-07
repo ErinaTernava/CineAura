@@ -50,7 +50,7 @@ const Password = ({ setMessage }) => {
       maxWidth: '600px',
       margin: '0 auto',
       padding: '25px',
-      backgroundColor: '#1a252f',
+      backgroundColor: '#0b1214',
       borderRadius: '4px',
       border: '1px solid #ebd0ad'
     }}>
