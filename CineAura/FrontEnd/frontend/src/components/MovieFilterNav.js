@@ -6,9 +6,9 @@ const MovieFilterNav = ({
 }) => {
   return (
     <div className="py-2 mb-4" style={{ 
-      backgroundColor: '#0b1214',
-      borderBottom: '1px solid #2c3e50',
-      borderTop: '1px solid #2c3e50'
+      //backgroundColor: '#0b1214',
+      borderBottom: '1px solid #ebd0ad',
+      borderTop: '1px solid #ebd0ad'
     }}>
       <div className="container d-flex flex-wrap justify-content-center align-items-center gap-3">
         <button 
