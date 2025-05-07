@@ -118,7 +118,7 @@ namespace CineAura.Services
             List<Claim> claims = new List<Claim>
             {
 
-                new Claim(ClaimTypes.Role, user.IsAdmin.ToString()),
+                new Claim(ClaimTypes.Role, user.IsAdmin? "Admin" : "User"),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
 
