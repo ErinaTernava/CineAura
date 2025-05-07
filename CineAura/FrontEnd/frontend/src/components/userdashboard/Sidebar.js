@@ -4,14 +4,16 @@ const Sidebar = ({ userEmail, activeTab, setActiveTab, setShowDeleteConfirm }) =
   return (
     <div style={{ 
       width: '220px',
-      backgroundColor: '#1a252f',
+      //backgroundColor: '#0b1214',
+      backgroundColor:'transparent',
       borderRight: '1px solid #ebd0ad',
       padding: '15px',
       display: 'flex',
       flexDirection: 'column',
       position: 'sticky',
       margin: -40,
-      top: 0
+      top: 0,
+     
     }}>
       <div style={{ 
         paddingBottom: '20px',

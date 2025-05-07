@@ -9,12 +9,9 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import CartPage from './pages/CartPage';
 import UserDashboard from './pages/UserDashboard';
 import Help from './pages/Help';
-import SearchResultPage from './pages/SearchResultPage';
-import AdminLayout from './components/admin/AdminLayout';
-import MoviesPage from './pages/admin/MoviePage';
-import AddMoviePage from './pages/admin/AddMoviePage';
-import UsersPage from './pages/admin/UsersPage';
-import EditMoviePage from './pages/admin/EditMoviePage';
+import SearchResultPage from './pages/SearchResultPage'; 
+import SuccessPage from './pages/SuccessPage';
+import CancelPage from './pages/CancelPage';
 
 function App() {
   return (
@@ -28,13 +25,9 @@ function App() {
               <Route path="/cart" element={<CartPage />} />
               <Route path="/help" element={<Help />} />
               <Route path="/search" element={<SearchResultPage />} />
-          <Route path="admin" element={<AdminLayout />}>
-            <Route index element={<MoviesPage />} />
-            <Route path="movies" element={<MoviesPage />} />
-            <Route path="add-movie" element={<AddMoviePage />} />
-            <Route path="users" element={<UsersPage />} />
-            <Route path="movies/edit/:id" element={<EditMoviePage />} />
-          </Route>              
+              <Route path="/success" element={<SuccessPage/>}/>
+              <Route path="/cancel" element={<CancelPage/>}/>
+              
       </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
