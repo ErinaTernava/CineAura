@@ -17,6 +17,9 @@ import MoviesPage from './pages/admin/MoviePage';
 import AddMoviePage from './pages/admin/AddMoviePage';
 import UsersPage from './pages/admin/UsersPage';
 import EditMoviePage from './pages/admin/EditMoviePage';
+import AddHallPage from './pages/admin/AddHallPage';
+import EditHallPage from './pages/admin/EditHallPage';
+import HallsPage from './pages/admin/HallsPage';
 
 
 function App() {
@@ -39,6 +42,9 @@ function App() {
                   <Route path="add-movie" element={<AddMoviePage />} />
                   <Route path="users" element={<UsersPage />} />
                   <Route path="movies/edit/:id" element={<EditMoviePage />} />
+                  <Route path="halls" element={<HallsPage />} />
+                  <Route path="add-hall" element={<AddHallPage />} />
+                  <Route path="halls/edit/:id" element={<EditHallPage />} />
               </Route>   
               
       </Route>
