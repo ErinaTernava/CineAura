@@ -44,6 +44,22 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region GetAll 
+        public async Task<List<HallDTO>> GetAll()
+        {
+            return await _context.Hall
+                .Select(h => new HallDTO
+                {
+                    Id = h.Id,
+                    HallName = h.HallName,
+                    HallType = h.HallType,
+                    CapacityOfSeats = h.CapacityOfSeats
+                })
+                .ToListAsync();
+        }
+
+        #endregion
+
         #region GetById
         public async Task<HallDTO> GetById(int id)
         {
@@ -64,6 +80,68 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region Save
+        public async Task<bool> Save(HallDTO hall)
+        {
+            try
+            {
+                var model = hall.Adapt<Hall>();
+                _context.Hall.Add(model);
+                var result = await _context.SaveChangesAsync();
 
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred while saving the hall.");
+            }
+        }
+        #endregion
+
+        #region Update
+        public async Task<HallDTO> Update(int id, HallDTO hall)
+        {
+            try
+            {
+                var obj = await _context.Hall.FirstOrDefaultAsync(x => x.Id == id);
+                if (obj == null)
+                    return null;
+
+                obj.HallName = hall.HallName;
+                obj.HallType = hall.HallType;
+                obj.CapacityOfSeats = hall.CapacityOfSeats;
+
+                await _context.SaveChangesAsync();
+
+                return obj.Adapt<HallDTO>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred while updating the hall.");
+            }
+        }
+        #endregion
+
+        #region Delete
+        public async Task<bool> Delete(int id)
+        {
+            try
+            {
+                var hall = await _context.Hall.FindAsync(id);
+                if (hall == null) return false;
+
+                _context.Hall.Remove(hall);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred while deleting the hall.");
+            }
+        }
+        #endregion
     }
 }
