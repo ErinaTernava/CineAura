@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { FiFilm, FiPlusSquare, FiUsers, FiSettings, FiHome } from 'react-icons/fi';
+import { FiFilm, FiPlusSquare, FiUsers, FiSettings, FiHome, FiCalendar } from 'react-icons/fi';
 
 const AdminLayout = () => {
   return (
@@ -122,7 +122,40 @@ const AdminLayout = () => {
             <FiPlusSquare style={{ marginRight: '12px', fontSize: '1.1rem' }} />
             Add Hall
           </Link>
-          
+
+          <Link
+            to="/admin/showtimes"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '12px 15px',
+              borderRadius: '6px',
+              backgroundColor: window.location.pathname.includes('/showtimes') ? '#2c3e50' : 'transparent',
+              color: window.location.pathname.includes('/showtimes') ? '#ebd0ad' : '#ffffff',
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+            }}
+          >
+            <FiCalendar style={{ marginRight: '12px', fontSize: '1.1rem' }} />
+            View Showtimes
+          </Link>
+
+           <Link
+            to="/admin/add-showtime"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '12px 15px',
+              borderRadius: '6px',
+              backgroundColor: window.location.pathname.includes('/add-showtime') ? '#2c3e50' : 'transparent',
+              color: window.location.pathname.includes('/add-showtime') ? '#ebd0ad' : '#ffffff',
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+            }}
+          >
+            <FiPlusSquare style={{ marginRight: '12px', fontSize: '1.1rem' }} />
+            Add showtime
+          </Link>
           <Link
             to="/admin/users"
             style={{
