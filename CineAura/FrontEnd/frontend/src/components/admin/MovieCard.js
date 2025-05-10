@@ -25,7 +25,7 @@ const MovieCard = ({ movie, onDelete }) => {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
-        });
+        }); window.location.reload();
         
         if (!response.ok) throw new Error('Failed to delete movie');
         onDelete(id);
