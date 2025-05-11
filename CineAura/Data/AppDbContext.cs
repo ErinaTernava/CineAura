@@ -21,5 +21,6 @@ namespace CineAura.Data
         public DbSet<Ticket> Ticket { get; set; }
         public DbSet<CartTicket> CartTicket { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<EmailConfig> EmailConfig { get; set; }
     } 
 }
