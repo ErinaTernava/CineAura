@@ -1,0 +1,12 @@
+﻿using CineAura.Data.DTO;
+
+namespace CineAura.Services.Interfaces
+{
+    public interface IEmailConfigService
+    {
+        Task<string> Create(EmailConfigDTO dto);
+        Task<EmailConfigDTO?> Get();
+        Task<EmailConfigDTO> Update(int id, EmailConfigDTO dto);
+        Task<bool> Delete(int id);
+    }
+}
