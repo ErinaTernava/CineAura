@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { FiFilm, FiPlusSquare, FiUsers, FiSettings, FiHome, FiCalendar } from 'react-icons/fi';
+import { FiFilm, FiPlusSquare, FiUsers, FiSettings, FiHome, FiCalendar, FiMail } from 'react-icons/fi';
 
 const AdminLayout = () => {
   return (
@@ -171,6 +171,23 @@ const AdminLayout = () => {
           >
             <FiUsers style={{ marginRight: '12px', fontSize: '1.1rem' }} />
             Manage Users
+          </Link>
+
+          <Link
+            to="/admin/email-config"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '12px 15px',
+              borderRadius: '6px',
+              backgroundColor: window.location.pathname.includes('/email-config') ? '#2c3e50' : 'transparent',
+              color: window.location.pathname.includes('/email-config') ? '#ebd0ad' : '#ffffff',
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+            }}
+          >
+            <FiMail style={{ marginRight: '12px', fontSize: '1.1rem' }} />
+            Email Configuration
           </Link>
         </nav>
       </div>
