@@ -87,6 +87,37 @@ namespace CineAura.Services
         }
         #endregion
 
+        #region Test
+        public async Task TestSmtpConnection(EmailConfigDTO dto)
+        {
+            using var smtpClient = new SmtpClient(dto.SmtpHost, dto.Port)
+            {
+                Credentials = new NetworkCredential(dto.SenderEmail, dto.EncryptedPassword),
+                EnableSsl = dto.EnableSsl
+            };
+
+            try
+            {
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+                var mail = new MailMessage
+                {
+                    From = new MailAddress(dto.SenderEmail, dto.DisplayName),
+                    Subject = "SMTP Test",
+                    Body = "This is a test email to verify SMTP configuration.",
+                    IsBodyHtml = false
+                };
+                mail.To.Add(dto.SenderEmail); 
+
+                await smtpClient.SendMailAsync(mail);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"SMTP test failed: {ex.Message}", ex);
+            }
+        }        
+        #endregion
+
         #region Update
         public async Task<EmailConfigDTO> Update(int id, EmailConfigDTO dto)
         {

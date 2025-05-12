@@ -1,6 +1,7 @@
 ﻿using CineAura.Data.DTO;
 using CineAura.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace CineAura.Controllers
 {
@@ -17,21 +18,36 @@ namespace CineAura.Controllers
 
         #region Create
         [HttpPost("create")]
-        public async Task<IActionResult> Create(EmailConfigDTO dto)
+        [Produces("application/json")]
+        public async Task<IActionResult> Create([FromBody] EmailConfigDTO dto)
         {
+            Console.WriteLine($"Received create request: {JsonSerializer.Serialize(dto)}");
+
             try
             {
-                if (!ModelState.IsValid) return BadRequest(ModelState);
+                if (!ModelState.IsValid)
+                {
+                    var errors = ModelState.Values
+                        .SelectMany(v => v.Errors)
+                        .Select(e => e.ErrorMessage);
+                    Console.WriteLine($"Validation errors: {string.Join(", ", errors)}");
+                    return BadRequest(new { message = "Validation failed", errors });
+                }
 
                 var result = await _service.Create(dto);
-                if (result.StartsWith("SMTP test failed") || result.StartsWith("An email configuration already exists"))
-                    return BadRequest(result);
+                Console.WriteLine($"Service result: {result}");
 
-                return Ok(result);
+                if (result.StartsWith("SMTP test failed") || result.StartsWith("An email configuration"))
+                {
+                    return BadRequest(new { message = result });
+                }
+
+                return Ok(new { message = result });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                Console.WriteLine($"Exception: {ex}");
+                return BadRequest(new { message = ex.Message });
             }
         }
         #endregion
@@ -84,6 +100,22 @@ namespace CineAura.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Test
+        [HttpPost("test")]
+        public async Task<IActionResult> TestSmtp(EmailConfigDTO config)
+        {
+            try
+            {
+                await _service.TestSmtpConnection(config);
+                return Ok(new { message = "SMTP connection successful!" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
             }
         }
         #endregion
