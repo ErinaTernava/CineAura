@@ -23,7 +23,7 @@ import HallsPage from './pages/admin/HallsPage';
 import AddShowtimePage from './pages/admin/AddShowtimePage';
 import EditShowtimePage from './pages/admin/EditShowtimePage';
 import ShowtimesPage from './pages/admin/ShowtimePage';
-
+import EmailConfigPage from './pages/admin/EmailConfigPage';
 
 function App() {
   return (
@@ -38,7 +38,7 @@ function App() {
               <Route path="/help" element={<Help />} />
               <Route path="/search" element={<SearchResultPage />} />
               <Route path="/success" element={<SuccessPage/>}/>
-              <Route path="/cancel" element={<CancelPage />} />
+              <Route path="/cancel" element={<CancelPage />} />              
               <Route path="admin" element={<AdminLayout />}>
                   <Route index element={<MoviesPage />} />
                   <Route path="movies" element={<MoviesPage />} />
@@ -51,6 +51,7 @@ function App() {
                   <Route path="showtimes" element={<ShowtimesPage />} />
                   <Route path="add-showtime" element={<AddShowtimePage />} />
                   <Route path="showtimes/edit/:id" element={<EditShowtimePage />} />
+                  <Route path="email-config" element={<EmailConfigPage />} />   
               </Route>   
               
       </Route>
