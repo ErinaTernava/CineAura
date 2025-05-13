@@ -19,15 +19,15 @@ namespace CineAura.Services
         }
 
         #region Create
-        public async Task<string> Create(EmailConfigDTO dto)
+        public async Task<EmailConfigDTO> Create(EmailConfigDTO dto)
         {
             try
             {
                 if (await _context.EmailConfig.AnyAsync())
-                    return "An email configuration already exists. Please update or delete it first.";
+                    throw new Exception("An email configuration already exists. Please update or delete it first.");
 
                 if (!PingSmtpServer(dto))
-                    return "SMTP test failed. Check your credentials or server details.";
+                    throw new Exception("SMTP test failed. Check your credentials or server details.");
 
                 var config = new EmailConfig
                 {
@@ -42,7 +42,7 @@ namespace CineAura.Services
                 _context.EmailConfig.Add(config);
                 await _context.SaveChangesAsync();
 
-                return "Email configuration created successfully.";
+                return config.Adapt<EmailConfigDTO>();
             }
             catch (Exception ex)
             {

@@ -18,7 +18,7 @@ namespace CineAura.Controllers
 
         #region Create
         [HttpPost("create")]
-        [Produces("application/json")]
+        [Produces("application/json")]        
         public async Task<IActionResult> Create([FromBody] EmailConfigDTO dto)
         {
             Console.WriteLine($"Received create request: {JsonSerializer.Serialize(dto)}");
@@ -34,22 +34,16 @@ namespace CineAura.Controllers
                     return BadRequest(new { message = "Validation failed", errors });
                 }
 
-                var result = await _service.Create(dto);
-                Console.WriteLine($"Service result: {result}");
-
-                if (result.StartsWith("SMTP test failed") || result.StartsWith("An email configuration"))
-                {
-                    return BadRequest(new { message = result });
-                }
-
-                return Ok(new { message = result });
+                var createdDto = await _service.Create(dto);
+                return Ok(new { message = "Configuration created successfully", data = createdDto });
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex}");
+                Console.WriteLine($"Exception: {ex.Message}");
                 return BadRequest(new { message = ex.Message });
             }
         }
+
         #endregion
 
         #region Get
