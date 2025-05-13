@@ -100,11 +100,11 @@ namespace CineAura.Controllers
 
         #region Test
         [HttpPost("test")]
-        public async Task<IActionResult> TestSmtp(EmailConfigDTO config)
+        public async Task<IActionResult> TestSmtp()
         {
             try
             {
-                await _service.TestSmtpConnection(config);
+                await _service.TestSmtpConnection();
                 return Ok(new { message = "SMTP connection successful!" });
             }
             catch (Exception ex)

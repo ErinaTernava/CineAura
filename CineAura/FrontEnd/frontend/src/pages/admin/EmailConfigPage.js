@@ -71,6 +71,30 @@ const EmailConfigPage = () => {
     setEditMode(false);
     fetchConfig(); 
   };
+  
+  const handleTestConfiguration = async () => {
+  try {
+    const response = await fetch('http://localhost:5283/api/EmailConfig/test', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    const resultText = await response.text();
+    const result = resultText ? JSON.parse(resultText) : {};
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Test failed');
+    }
+
+    alert('Email configuration is valid! Test succeeded.');
+  } catch (err) {
+    alert(`Test failed: ${err.message}`);
+  }
+};
+
 
   if (loading) return <div className="text-center py-5" style={{ color: '#ebd0ad' }}>Loading...</div>;
   if (error) return <div className="alert alert-danger">Error: {error}</div>;
@@ -120,7 +144,7 @@ const EmailConfigPage = () => {
         }}>
           <div className="d-flex justify-content-between align-items-start mb-4">
             <h5 style={{ color: '#ebd0ad' }}>Current Configuration</h5>
-            <div>
+            <div className="d-flex flex-column align-items-start gap-2">
               <button 
                 onClick={() => setEditMode(true)}
                 className="btn btn-outline-warning me-2"
@@ -134,6 +158,13 @@ const EmailConfigPage = () => {
               >
                 <FiTrash2 className="me-1" />
                 Delete
+              </button>
+               <button 
+                 onClick={handleTestConfiguration}
+                 className="btn btn-outline-info"
+              >
+                <FiMail className="me-1" />
+                Test
               </button>
             </div>
           </div>

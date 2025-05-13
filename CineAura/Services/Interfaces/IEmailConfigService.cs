@@ -8,6 +8,6 @@ namespace CineAura.Services.Interfaces
         Task<EmailConfigDTO?> Get();
         Task<EmailConfigDTO> Update(int id, EmailConfigDTO dto);
         Task<bool> Delete(int id);
-        Task TestSmtpConnection(EmailConfigDTO configDto);
+        Task TestSmtpConnection();
     }
 }

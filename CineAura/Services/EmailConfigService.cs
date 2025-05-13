@@ -88,26 +88,31 @@ namespace CineAura.Services
         #endregion
 
         #region Test
-        public async Task TestSmtpConnection(EmailConfigDTO dto)
+        public async Task TestSmtpConnection()
         {
-            using var smtpClient = new SmtpClient(dto.SmtpHost, dto.Port)
+            var config = await _context.EmailConfig.FirstOrDefaultAsync();
+            if (config == null)
+                throw new Exception("No email configuration found in the database.");
+
+            var decryptedPassword = AesEncryption.Decrypt(config.EncryptedPassword);
+
+            using var smtpClient = new SmtpClient(config.SmtpHost, config.Port)
             {
-                Credentials = new NetworkCredential(dto.SenderEmail, dto.EncryptedPassword),
-                EnableSsl = dto.EnableSsl
+                Credentials = new NetworkCredential(config.SenderEmail, decryptedPassword),
+                EnableSsl = config.EnableSsl,
+                DeliveryMethod = SmtpDeliveryMethod.Network
             };
 
             try
             {
-                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
-
                 var mail = new MailMessage
                 {
-                    From = new MailAddress(dto.SenderEmail, dto.DisplayName),
+                    From = new MailAddress(config.SenderEmail, config.DisplayName),
                     Subject = "SMTP Test",
-                    Body = "This is a test email to verify SMTP configuration.",
+                    Body = "This is a test email to verify SMTP configuration from the database.",
                     IsBodyHtml = false
                 };
-                mail.To.Add(dto.SenderEmail); 
+                mail.To.Add(config.SenderEmail);
 
                 await smtpClient.SendMailAsync(mail);
             }
