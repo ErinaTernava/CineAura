@@ -27,7 +27,10 @@ const HallCard = ({ hall, onDelete }) => {
       backgroundColor: '#0b1214',
       border: '1px solid #2c3e50',
       borderRadius: '8px',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      width: '100%',
+      maxWidth: '400px',
+      margin: 'auto',
     }}>
       <div style={{ 
         height: '220px', 
@@ -35,7 +38,8 @@ const HallCard = ({ hall, onDelete }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderBottom: '1px solid #2c3e50'
+        borderBottom: '1px solid #2c3e50',
+        textAlign: 'center'
       }}>
         <h2 style={{ 
           color: 'white',
@@ -62,7 +66,8 @@ const HallCard = ({ hall, onDelete }) => {
             padding: '4px 8px',
             borderRadius: '4px',
             fontSize: '0.8rem',
-            fontWeight: '500'
+            fontWeight: '500',
+            marginTop: '4px'
           }}>
             {hall.hallType}
           </span>
@@ -76,17 +81,13 @@ const HallCard = ({ hall, onDelete }) => {
           }}>
             Capacity
           </p>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}>
-            <div style={{
-              width: '100%',
+          <div className="d-flex align-items-center gap-2 flex-wrap">
+            <div className="flex-grow-1" style={{
               height: '8px',
               backgroundColor: '#2c3e50',
               borderRadius: '4px',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              minWidth: '150px'
             }}>
               <div style={{
                 width: '100%',
@@ -95,7 +96,7 @@ const HallCard = ({ hall, onDelete }) => {
                 borderRadius: '4px'
               }}></div>
             </div>
-            <span style={{ 
+            <span style={{
               color: '#ebd0ad',
               fontWeight: '500',
               fontSize: '0.9rem',
@@ -106,38 +107,37 @@ const HallCard = ({ hall, onDelete }) => {
           </div>
         </div>
       </div>
+
       
-      <div className="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+       <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
         <button 
           onClick={() => navigate(`/admin/halls/edit/${hall.id}`)}
+          className="btn btn-sm"
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            padding: '8px 12px',
+            gap: '6px',
             backgroundColor: 'transparent',
             color: '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '6px',
-            cursor: 'pointer'
           }}
         >
           <FiEdit2 style={{ marginRight: '6px' }} />
           Edit
         </button>
         
-        <button 
+       <button 
           onClick={() => handleDelete(hall.id)}
+          className="btn btn-sm"
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            padding: '8px 12px',
+            gap: '6px',
             backgroundColor: 'transparent',
             color: '#e74c3c',
             border: '1px solid #e74c3c',
             borderRadius: '6px',
-            cursor: 'pointer'
           }}
         >
           <FiTrash2 style={{ marginRight: '6px' }} />
