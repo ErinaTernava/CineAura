@@ -18,6 +18,7 @@ namespace CineAura.Services
             services.AddScoped<ICartTicketService, CartTicketService>();
             services.AddScoped<IStripeService, StripeService>();
             services.AddScoped<IEmailConfigService, EmailConfigService>();
+            services.AddScoped<IPasswordResetService, PasswordResetService>();
         }
     }
 }

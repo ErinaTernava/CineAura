@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineAura - Password Reset</title>
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            color: #ebd0ad;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #0b1214;
+        }
+        
+        .header {
+            background: linear-gradient(to right, #0b1214, #1a252f);
+            padding: 40px 30px;
+            text-align: center;
+            border-bottom: 2px solid #ebd0ad;
+        }
+        
+        .logo-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: #ebd0ad;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin: 0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .content {
+            padding: 30px;
+            background-color: #1a252f;
+        }
+        
+        h1 {
+            color: #ebd0ad;
+            margin-top: 0;
+            font-size: 24px;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .code-container {
+            background-color: #0b1214;
+            border-left: 4px solid #ebd0ad;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        
+        .confirmation-code {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ebd0ad;
+            padding: 10px 20px;
+            background-color: #1a252f;
+            border-radius: 4px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #ebd0ad;
+            color: #0b1214 !important;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+        
+        .footer {
+            background-color: #0b1214;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #ebd0ad;
+            border-top: 1px solid #1a252f;
+        }
+        
+        .small {
+            font-size: 13px;
+            color: #ebd0ad;
+            opacity: 0.8;
+        }
+        
+        /* Responsive styles */
+        @media only screen and (max-width: 600px) {
+            .header, .content {
+                padding: 20px;
+            }
+            
+            .logo-text {
+                font-size: 32px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="logo-text">CineAura</h1>
+        </div>
+        
+        <div class="content">
+            <h1>Password Reset Request</h1>
+            
+            <p>Hello,</p>
+            
+            <p>We received a request to reset your password for your CineAura account. Please use the following confirmation code to proceed:</p>
+            
+            <div class="code-container">
+                <div class="confirmation-code">@code</div>
+            </div>
+            
+            <p>This code will expire in 30 minutes. If you didn't request a password reset, please ignore this email or contact support if you have concerns.</p>
+            
+            <p class="small">For security reasons, please don't share this code with anyone.</p>
+            
+            <a href="#" class="button">Reset Password</a>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2025 CineAura. All rights reserved.</p>
+            <p>
+                <a href="#" style="color: #ebd0ad; text-decoration: none;">Privacy Policy</a> | 
+                <a href="#" style="color: #ebd0ad; text-decoration: none;">Terms of Service</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
