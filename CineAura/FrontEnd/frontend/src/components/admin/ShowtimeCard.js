@@ -53,11 +53,14 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
   };
 
   return (
-    <div className="card h-100" style={{
+     <div className="card h-100" style={{
       backgroundColor: '#0b1214',
       border: '1px solid #2c3e50',
       borderRadius: '8px',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      width: '100%',
+      maxWidth: '400px',
+      margin: '0 auto'
     }}>
       <div className="card-body">
         <h5 className="card-title" style={{ color: '#ebd0ad' }}>
@@ -74,10 +77,12 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
         </p>
       </div>
 
-      <div className="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+       <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
         <button
           onClick={() => navigate(`/admin/showtimes/edit/${showtime.id}`)}
+          className="btn btn-sm"
           style={{
+            flex: '1 1 45%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -85,8 +90,7 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
             backgroundColor: 'transparent',
             color: '#ebd0ad',
             border: '1px solid #ebd0ad',
-            borderRadius: '6px',
-            cursor: 'pointer'
+            borderRadius: '6px'
           }}
           disabled={isDeleting}
         >
@@ -96,7 +100,9 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
 
         <button
           onClick={() => handleDelete(showtime.id)}
+          className="btn btn-sm"
           style={{
+            flex: '1 1 45%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -104,8 +110,7 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
             backgroundColor: 'transparent',
             color: '#e74c3c',
             border: '1px solid #e74c3c',
-            borderRadius: '6px',
-            cursor: 'pointer'
+            borderRadius: '6px'
           }}
           disabled={isDeleting}
         >
