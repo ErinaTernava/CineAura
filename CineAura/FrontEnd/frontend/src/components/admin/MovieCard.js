@@ -37,42 +37,51 @@ const MovieCard = ({ movie, onDelete }) => {
   };
 
   return (
-    <div className="card h-100" style={{ 
+       <div className="card h-100" style={{
       backgroundColor: '#0b1214',
       border: '1px solid #2c3e50',
       borderRadius: '8px',
-      overflow: 'hidden'
+      overflow: 'hidden',
+      width: '100%',
+      maxWidth: '400px',
+      margin: '0 auto',
+      display: 'flex',
+      flexDirection: 'column',
     }}>
       {movie.photo && (
-        <img 
-          src={`data:image/jpeg;base64,${movie.photo}`} 
-          className="card-img-top" 
+        <img
+          src={`data:image/jpeg;base64,${movie.photo}`}
+          className="card-img-top"
           alt={movie.title}
-          style={{ 
-            height: '220px', 
+          style={{
+            height: '220px',
             objectFit: 'cover',
-            borderBottom: '1px solid #2c3e50'
+            borderBottom: '1px solid #2c3e50',
+            width: '100%'
           }}
         />
       )}
+
       
-      <div className="card-body">
-        <div className="d-flex justify-content-between align-items-start mb-2">
+      <div className="card-body d-flex flex-column justify-content-between">
+        <div className="d-flex justify-content-between align-items-start mb-2 flex-wrap">
           <h5 className="card-title" style={{ 
             color: '#ebd0ad',
             fontSize: '1.1rem',
-            fontWeight: '500'
+            fontWeight: '500',
+            marginBottom: '0.5rem'
           }}>
             {movie.title}
           </h5>
-          <span style={{
-            backgroundColor: status.color,
-            color: 'white',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            fontSize: '0.8rem',
-            fontWeight: '500'
-          }}>
+         <span style={{
+              backgroundColor: status.color,
+              color: 'white',
+              padding: '4px 8px',
+              borderRadius: '4px',
+              fontSize: '0.8rem',
+              fontWeight: '500',
+              whiteSpace: 'nowrap'
+            }}>
             {status.text}
           </span>
         </div>
@@ -93,10 +102,12 @@ const MovieCard = ({ movie, onDelete }) => {
         </p>
       </div>
       
-      <div className="card-footer bg-transparent border-top-0 d-flex justify-content-between">
-        <button 
+       <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
+        <button
           onClick={() => navigate(`/admin/movies/edit/${movie.id}`)}
+          className="btn btn-sm"
           style={{
+            flex: '1 1 45%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -112,9 +123,11 @@ const MovieCard = ({ movie, onDelete }) => {
           Edit
         </button>
         
-        <button 
+       <button
           onClick={() => handleDelete(movie.id)}
+          className="btn btn-sm"
           style={{
+            flex: '1 1 45%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
