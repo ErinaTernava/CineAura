@@ -5,12 +5,13 @@ const UserRow = ({ user, onDelete }) => {
   return (
     <tr style={{ 
       borderBottom: '1px solid #2c3e50',
+       borderRadius:'12px',
       transition: 'background-color 0.2s',
       ':hover': {
         backgroundColor: 'rgba(44, 62, 80, 0.5)'
       }
     }}>
-      <td style={{ padding: '16px', color: '#d1d5db' }}>
+      <td style={{ padding: '16px', color: '#d1d5db'}}>
         {user.firstName} {user.lastName}
       </td>
       <td style={{ padding: '16px', color: '#d1d5db' }}>

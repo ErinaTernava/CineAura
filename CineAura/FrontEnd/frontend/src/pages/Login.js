@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
 import useAuthToken from '../hooks/useAuthToken';
 import axios from 'axios';
+import ResetPasswordCard from '../components/ResetPasswordCard';
+
 
 const Login = () => {
   const [, setCookie] = useCookies(['access_token']);
@@ -12,6 +14,8 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [errorFields, setErrorFields] = useState({ email: false, password: false });
   const navigate = useNavigate();
+  const [showResetCard, setShowResetCard] = useState(false);
+
   
 
   useEffect(() => {
@@ -56,7 +60,8 @@ const Login = () => {
 
 
   return (
-    
+    <div style={{ backgroundColor: '#0b1214', minHeight: '100vh' }}>
+      {showResetCard && <ResetPasswordCard onClose={() => setShowResetCard(false)} />}
     <div style={{ backgroundColor: '#0b1214', minHeight: '100vh' }}>
       <img 
           src="/Images/CineAura.png" 
@@ -116,6 +121,9 @@ const Login = () => {
                 }}
                 required
               />
+              <p className="text-start mt-3" style={{ color: '#a69074' }}>
+                Forgot Password? <span style={{ color: '#ebd0ad', cursor: 'pointer' }} onClick={() => setShowResetCard(true)}>Reset Password</span>
+              </p>
             {errorMessage && (
               <div className="text-danger mt-2" style={{ fontSize: '0.9rem' }}>
                 {errorMessage}
@@ -140,6 +148,7 @@ const Login = () => {
         </div>
       </div>
     </div>
+     </div>
   );
 };
 
