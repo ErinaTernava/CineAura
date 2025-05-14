@@ -29,8 +29,7 @@ const HallCard = ({ hall, onDelete }) => {
       borderRadius: '8px',
       overflow: 'hidden',
       width: '100%',
-      maxWidth: '400px',
-      margin: 'auto',
+      height: '100%',
     }}>
       <div style={{ 
         height: '220px', 

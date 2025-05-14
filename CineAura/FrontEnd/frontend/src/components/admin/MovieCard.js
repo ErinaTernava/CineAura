@@ -37,17 +37,16 @@ const MovieCard = ({ movie, onDelete }) => {
   };
 
   return (
-       <div className="card h-100" style={{
-      backgroundColor: '#0b1214',
-      border: '1px solid #2c3e50',
-      borderRadius: '8px',
-      overflow: 'hidden',
-      width: '100%',
-      maxWidth: '400px',
-      margin: '0 auto',
-      display: 'flex',
-      flexDirection: 'column',
-    }}>
+     <div className="card h-100"  
+      style={{
+        backgroundColor: '#0b1214',
+        border: '1px solid #2c3e50',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        width: '300px', 
+        display: 'flex',
+        flexDirection: 'column',
+      }}>
       {movie.photo && (
         <img
           src={`data:image/jpeg;base64,${movie.photo}`}
@@ -57,14 +56,14 @@ const MovieCard = ({ movie, onDelete }) => {
             height: '220px',
             objectFit: 'cover',
             borderBottom: '1px solid #2c3e50',
-            width: '100%'
+            width: '100%',
           }}
         />
       )}
 
       
-      <div className="card-body d-flex flex-column justify-content-between">
-        <div className="d-flex justify-content-between align-items-start mb-2 flex-wrap">
+      <div className="card-body" style={{ flexGrow: 1 }}>
+        <div className="d-flex justify-content-between align-items-start mb-2">
           <h5 className="card-title" style={{ 
             color: '#ebd0ad',
             fontSize: '1.1rem',
@@ -80,7 +79,6 @@ const MovieCard = ({ movie, onDelete }) => {
               borderRadius: '4px',
               fontSize: '0.8rem',
               fontWeight: '500',
-              whiteSpace: 'nowrap'
             }}>
             {status.text}
           </span>
@@ -107,7 +105,7 @@ const MovieCard = ({ movie, onDelete }) => {
           onClick={() => navigate(`/admin/movies/edit/${movie.id}`)}
           className="btn btn-sm"
           style={{
-            flex: '1 1 45%',
+            flex: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -127,7 +125,7 @@ const MovieCard = ({ movie, onDelete }) => {
           onClick={() => handleDelete(movie.id)}
           className="btn btn-sm"
           style={{
-            flex: '1 1 45%',
+            flex: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

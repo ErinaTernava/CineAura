@@ -24,7 +24,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
       e.preventDefault();
       handleSubmit(formData);
     }}>
-      <div className="mb-3">
+      <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
         <label className="form-label" style={{ color: '#ebd0ad' }}>Title</label>
         <input
           type="text"
@@ -36,7 +36,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
         />
       </div>
 
-      <div className="mb-3">
+      <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
         <label className="form-label" style={{ color: '#ebd0ad' }}>Description</label>
         <textarea
           name="description"
@@ -48,7 +48,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
         />
       </div>
 
-      <div className="row mb-3">
+      <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
         <div className="col-md-6">
           <label className="form-label" style={{ color: '#ebd0ad' }}>Duration (minutes)</label>
           <input
@@ -60,7 +60,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
             required
           />
         </div>
-        <div className="col-md-6">
+        <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
           <label className="form-label" style={{ color: '#ebd0ad' }}>Genre</label>
           <select
             name="genreId"
@@ -77,7 +77,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
         </div>
       </div>
 
-      <div className="row mb-3">
+      <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
         <div className="col-md-6">
           <label className="form-label" style={{ color: '#ebd0ad' }}>Release Date</label>
           <input
@@ -89,7 +89,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
             required
           />
         </div>
-        <div className="col-md-6">
+        <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
           <label className="form-label" style={{ color: '#ebd0ad' }}>End Date</label>
           <input
             type="date"
@@ -102,7 +102,7 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
         </div>
       </div>
 
-      <div className="mb-4">
+      <div className="row row-cols-1 row-cols-md-2 mb-4 g-4">
         <label className="form-label" style={{ color: '#ebd0ad' }}>Movie Poster</label>
         <input
           type="file"

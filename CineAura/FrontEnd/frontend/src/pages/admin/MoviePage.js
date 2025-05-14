@@ -48,12 +48,18 @@ const MoviesPage = () => {
   if (error) return <div className="alert alert-danger">Error: {error}</div>;
 
   return (
-    <div>
-      <h2 className="mb-4" style={{ color: '#ebd0ad' }}>Manage Movies</h2>
-      
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {movies.map(movie => (
-          <div key={movie.id} className="col">
+      <div className="container-fluid py-4">
+      <div className="row g-4" style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+        gap: '1.5rem',
+        padding: '0 1rem'
+      }}>
+       {movies.map(movie => (
+          <div key={movie.id} style={{
+            display: 'flex',
+            justifyContent: 'center'
+          }}>
             <MovieCard 
               movie={movie}
               onDelete={handleDelete}

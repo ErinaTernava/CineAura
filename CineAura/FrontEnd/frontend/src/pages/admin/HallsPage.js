@@ -53,16 +53,16 @@ const HallsPage = () => {
         </Link>
       </div>
 
-      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-        {halls.map(hall => (
-          <div className="col" key={hall.id}>
-            <HallCard 
-              hall={hall} 
-              onDelete={handleDelete} 
-            />
+        <div className="d-flex flex-wrap gap-4 justify-content-center">
+          {halls.map(hall => (
+            <div 
+              key={hall.id} 
+              style={{ flex: '1 1 300px', maxWidth: '400px' }}
+            >
+          <HallCard hall={hall} onDelete={handleDelete} />
           </div>
-        ))}
-      </div>
+         ))}
+        </div>
     </div>
   );
 };

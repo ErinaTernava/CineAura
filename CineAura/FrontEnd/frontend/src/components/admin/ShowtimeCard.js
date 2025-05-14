@@ -53,16 +53,18 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
   };
 
   return (
-     <div className="card h-100" style={{
+     <div className="card h-100 d-flex flex-column" style={{
       backgroundColor: '#0b1214',
       border: '1px solid #2c3e50',
       borderRadius: '8px',
       overflow: 'hidden',
       width: '100%',
-      maxWidth: '400px',
-      margin: '0 auto'
+    
+      minHeight: '320px', 
+   
+    
     }}>
-      <div className="card-body">
+      <div className="card-body flex-grow-1 d-flex flex-column justify-content-between">
         <h5 className="card-title" style={{ color: '#ebd0ad' }}>
           Movie Title: {showtime.movieTitle}
         </h5>
