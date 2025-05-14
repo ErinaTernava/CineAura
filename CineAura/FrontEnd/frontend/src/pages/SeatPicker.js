@@ -296,7 +296,7 @@ const SeatPicker = () => {
            const isLastRowIn3D = row === 'F' && viewType === '3d';
           
           return (
-            <div key={row} style={{ display: 'flex', alignItems: 'center' ,gap: '10px', paddingLeft: isLastRowIn3D ? '90px' : '0',}}>
+            <div key={row} style={{ display: 'flex', alignItems: 'center' ,gap: '10px', paddingLeft: isLastRowIn3D ? '80px' : '0',}}>
               <div style={{ 
                 width: '20px', 
                 fontWeight: 'bold', 
