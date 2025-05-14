@@ -76,23 +76,23 @@ const fetchHalls = async () => {
       StartTime: formData.StartTime,
       TicketPrice: parseFloat(formData.TicketPrice)
     };
-
+  
     console.log("Payload:", payload); 
 
-    await axios.post('http://localhost:5283/api/Showtime/save', payload, {
+ const response = await axios.post('http://localhost:5283/api/Showtime/save', payload, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
       }
     });
-    alert('Showtime created successfully!');
-  } catch (err) {
-    console.error('Failed to create showtime:', err);
-  }
-};
 
-
-
+     if (response.data) {
+        navigate('/admin/movies');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+    }
+   };
   return (
     <div className="container py-4">
       <h2 className="mb-4" style={{ color: '#ebd0ad' }}>Add New Showtime</h2>

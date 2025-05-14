@@ -293,14 +293,15 @@ const SeatPicker = () => {
         {['A', 'B', 'C', 'D', 'E', 'F'].map(row => {
           const rowSeats = hallSeats.filter(seat => seat.row === row);
           if (rowSeats.length === 0) return null;
+           const isLastRowIn3D = row === 'F' && viewType === '3d';
           
           return (
-            <div key={row} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div key={row} style={{ display: 'flex', alignItems: 'center' ,gap: '10px', paddingLeft: isLastRowIn3D ? '80px' : '0',}}>
               <div style={{ 
                 width: '20px', 
                 fontWeight: 'bold', 
                 color: '#ebd0ad',
-                fontSize: '1.1rem'
+                fontSize: '1.1rem',
               }}>{row}</div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {rowSeats.map(seat => (
