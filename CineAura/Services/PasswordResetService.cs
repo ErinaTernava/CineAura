@@ -22,8 +22,8 @@ namespace CineAura.Services
             _emailConfigService = emailConfigService;
         }
 
-        #region Generate and Send Code
-        public async Task<PasswordResetDTO?> GenerateSendCode(string email)
+        #region Send Code
+        public async Task<PasswordResetDTO?> SendCode(string email)
         {
             try
             {
