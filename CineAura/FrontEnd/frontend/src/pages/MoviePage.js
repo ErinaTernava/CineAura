@@ -32,7 +32,7 @@ const MoviePage = () => {
             ...showtime,
             startTime: new Date(showtime.startTime),
             hallName: showtime.hall?.hallName || `Hall ${showtime.hallId}`,
-            hallType: showtime.hall?.hallType || '2D'
+            //hallType: showtime.hall?.hallType || "3D" ? "3D" : "2D"
           }));
           
           setShowtimes(formattedShowtimes);
@@ -45,6 +45,7 @@ const MoviePage = () => {
     };
     fetchData();
   }, [id]);
+   
 
   const handleButtonClick = () => {
     if (status === 'Coming Soon') {
@@ -187,7 +188,7 @@ const MoviePage = () => {
                                 </div>
                                 <div className="text-end">
                                   <span className="badge bg-secondary">
-                                    {showtime.hallType}
+                                  {showtime.hallType}
                                   </span>
                                 </div>
                               </div>
