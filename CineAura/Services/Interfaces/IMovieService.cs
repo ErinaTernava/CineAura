@@ -6,13 +6,14 @@ namespace CineAura.Services.Interfaces
 {
     public interface IMovieService
     {
-        Task<List<MovieDTO>> GetAll();
-        Task<MovieDTO> GetById(int id);
+        Task<List<MovieDisplayDTO>> GetAll();
+        Task<MovieDisplayDTO> GetById(int id);
         Task<List<MovieDTO>> GetByGenre(int genreId);
         Task<bool> Save(MovieDTO movie);
         Task<MovieDTO> Update(int id, MovieDTO movie);
         Task<bool> Delete(int id);       
         Task<IEnumerable<Movie>> SearchMovies(string query);
+        Task<List<GenreDTO>> GetGenres();
 
 
     }
