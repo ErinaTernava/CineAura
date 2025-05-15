@@ -33,6 +33,7 @@ namespace CineAura.Services
                         MovieTitle = s.Movie.Title,
                         HallId = s.HallId,
                         HallName = s.Hall.HallName,
+                        HallType = s.Hall.HallType,
                         StartTime = s.StartTime,
                         TicketPrice = s.TicketPrice
                     })
@@ -49,19 +50,28 @@ namespace CineAura.Services
         #endregion
 
         #region GetByMovie
-        public async Task<List<ShowtimeDTO>> GetByMovie(int movieId)
+        public async Task<List<ShowtimeDisplayDTO>> GetByMovie(int movieId)
         {
             try
             {
-                var showtime = await _context.Showtime
+                var showtimes = await _context.Showtime
+                    .Include(s => s.Hall)
+                    .Include(s => s.Movie)
                     .Where(x => x.MovieId == movieId)
+                    .Select(s => new ShowtimeDisplayDTO
+                    {
+                        Id = s.Id,
+                        MovieId = s.MovieId,
+                        MovieTitle = s.Movie.Title,
+                        HallId = s.HallId,
+                        HallName = s.Hall.HallName,
+                        HallType = s.Hall.HallType,
+                        StartTime = s.StartTime,
+                        TicketPrice = s.TicketPrice
+                    })
                     .ToListAsync();
 
-
-                if (showtime == null)
-                    throw new KeyNotFoundException($"Showtime for Movie ID {movieId} not found");
-
-                return showtime.Adapt<List<ShowtimeDTO>>();
+                return showtimes;
             }
             catch (Exception ex)
             {
@@ -72,7 +82,7 @@ namespace CineAura.Services
         #endregion
 
         #region GetById
-        public async Task<ShowtimeDTO> GetById(int id)
+        public async Task<ShowtimeDisplayDTO> GetById(int id)
         {
             try
             {
@@ -83,7 +93,7 @@ namespace CineAura.Services
 
                 if (showtime == null) return null;
 
-                return new ShowtimeDTO
+                return new ShowtimeDisplayDTO
                 {
                     Id = showtime.Id,
                     MovieId = showtime.MovieId,

@@ -17,12 +17,27 @@ namespace CineAura.Services
         }
 
         #region GetAll 
-        public async Task<List<MovieDTO>> GetAll()
+        public async Task<List<MovieDisplayDTO>> GetAll()
         {
             try
             {
-                var movies = await _context.Movie.ToListAsync();
-                return movies.Adapt<List<MovieDTO>>();
+                var movies = await _context.Movie
+           .Include(m => m.Genre)
+           .Select(m => new MovieDisplayDTO
+           {
+               Id = m.Id,
+               Title = m.Title,
+               Description = m.Description,
+               Duration = m.Duration,
+               ReleaseDate = m.ReleaseDate,
+               EndDate = m.EndDate,
+               Photo = m.Photo,
+               GenreId = m.GenreId,
+               GenreName = m.Genre.GenreName 
+           })
+           .ToListAsync();
+
+                return movies;
             }
             catch (Exception ex)
             {
@@ -33,15 +48,27 @@ namespace CineAura.Services
         #endregion
 
         #region GetById
-        public async Task<MovieDTO> GetById(int id)
+        public async Task<MovieDisplayDTO> GetById(int id)
         {
             try
             {
-                var movie = await _context.Movie.FirstOrDefaultAsync(x => x.Id == id);
-                if (movie == null)
-                    throw new KeyNotFoundException($"Movie with ID {id} not found");
-
-                return movie.Adapt<MovieDTO>();
+                var movie = await _context.Movie
+            .Include(m => m.Genre)
+            .Where(m => m.Id == id)
+            .Select(m => new MovieDisplayDTO
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                Duration = m.Duration,
+                ReleaseDate = m.ReleaseDate,
+                EndDate = m.EndDate,
+                Photo = m.Photo,
+                GenreId = m.GenreId,
+                GenreName = m.Genre.GenreName
+            })
+            .FirstOrDefaultAsync();
+                return movie;
             }
             catch (Exception ex)
             {
@@ -49,6 +76,22 @@ namespace CineAura.Services
                 throw new Exception("An error occurred");
             }
         }
+        #endregion
+
+        #region Get Genres
+        public async Task<List<GenreDTO>> GetGenres()
+        {
+            try
+            {
+                var genres = await _context.Genres.ToListAsync();
+                return genres.Adapt<List<GenreDTO>>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw new Exception("An error occurred");
+            }
+        }        
         #endregion
 
         #region GetByGenre

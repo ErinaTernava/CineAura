@@ -32,7 +32,7 @@ const MoviePage = () => {
             ...showtime,
             startTime: new Date(showtime.startTime),
             hallName: showtime.hall?.hallName || `Hall ${showtime.hallId}`,
-            hallType: showtime.hall?.hallType || '2D'
+            //hallType: showtime.hall?.hallType || "3D" ? "3D" : "2D"
           }));
           
           setShowtimes(formattedShowtimes);
@@ -45,6 +45,7 @@ const MoviePage = () => {
     };
     fetchData();
   }, [id]);
+   
 
   const handleButtonClick = () => {
     if (status === 'Coming Soon') {
@@ -119,7 +120,7 @@ const MoviePage = () => {
           <h1 className="mb-3">{movie.title}</h1>
           
           <div className="d-flex gap-3 mb-4 align-items-center flex-wrap">
-            <span className="badge bg-gold-accent text-dark">{movie.genre?.name}</span>
+            <span className="badge badge-secondary">{movie.genreName}</span>
             <span>{movie.duration} mins</span>
             <span>{new Date(movie.releaseDate).toLocaleDateString()}</span>
             <span className={`badge ${
@@ -187,7 +188,7 @@ const MoviePage = () => {
                                 </div>
                                 <div className="text-end">
                                   <span className="badge bg-secondary">
-                                    {showtime.hallType}
+                                  {showtime.hallType}
                                   </span>
                                 </div>
                               </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import MovieForm from '../../components/admin/MovieForm';
@@ -6,6 +6,7 @@ import MovieForm from '../../components/admin/MovieForm';
 const AddMoviePage = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(null);
+  const [genres, setGenres] = useState([]);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -17,18 +18,18 @@ const AddMoviePage = () => {
     photo: null
   });
 
-  const staticGenres = [
-    { id: 1, name: 'Action' },
-    { id: 2, name: 'Comedy' },
-    { id: 3, name: 'Sci-Fi' },
-    { id: 4, name: 'Horror' },
-    { id: 5, name: 'Romance' },
-    { id: 6, name: 'Thriller' },
-    { id: 7, name: 'Drama' },
-    { id: 8, name: 'Fantasy' },
-    { id: 9, name: 'Animation' },
-    { id: 10, name: 'Documentary' }
-  ];
+  useEffect(() => {
+    const fetchGenres = async () => {
+      try {
+        const response = await axios.get('http://localhost:5283/api/Movie/genres');
+        setGenres(response.data);
+      } catch (err) {
+        console.error('Failed to fetch genres:', err);
+      }
+    };
+
+    fetchGenres();
+  }, []);
 
   const handleSubmit = async (formData) => {
     try {
@@ -67,7 +68,7 @@ const AddMoviePage = () => {
         formData={formData}
         setFormData={setFormData}
         handleSubmit={handleSubmit}
-        genres={staticGenres}
+        genres={genres}
       />
       {error && <div className="alert alert-danger mt-3">{error}</div>}
     </div>

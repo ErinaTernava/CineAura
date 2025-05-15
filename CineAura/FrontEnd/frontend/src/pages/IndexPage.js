@@ -2,14 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthToken from '../hooks/useAuthToken';
 import MovieFilterNav from '../components/MovieFilterNav';
+import axios from 'axios';
 
 const IndexPage = () => {
   const { token } = useAuthToken();
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
+  const [selectedGenreId, setSelectedGenreId] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +23,7 @@ const IndexPage = () => {
         if (!moviesResponse.ok) throw new Error('Failed to fetch movies');
         const moviesData = await moviesResponse.json();
         setMovies(moviesData);
+        setFilteredMovies(moviesData);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -29,6 +33,33 @@ const IndexPage = () => {
 
     fetchData();
   }, [token]);
+
+  useEffect(() => {
+    const filterMovies = async () => {
+      if (selectedGenreId && activeFilter === 'genre') {
+        try {
+          const response = await axios.get(`http://localhost:5283/api/Movie/bygenre?genreId=${selectedGenreId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          setFilteredMovies(response.data);
+        } catch (error) {
+          console.error('Failed to fetch movies by genre:', error);
+        }
+      } else {
+        const filtered = movies.filter(movie => {
+          const status = getMovieStatus(movie.releaseDate, movie.endDate);
+          
+          if (activeFilter === 'available' && status !== 'Available') return false;
+          if (activeFilter === 'coming-soon' && status !== 'Coming Soon') return false;
+          
+          return true;
+        });
+        setFilteredMovies(filtered);
+      }
+    };
+
+    filterMovies();
+  }, [activeFilter, selectedGenreId, movies, token]);
 
   const getMovieStatus = (releaseDate, endDate) => {
     const today = new Date();
@@ -40,14 +71,9 @@ const IndexPage = () => {
     return 'Available';
   };
 
-  const filteredMovies = movies.filter(movie => {
-    const status = getMovieStatus(movie.releaseDate, movie.endDate);
-    
-    if (activeFilter === 'available' && status !== 'Available') return false;
-    if (activeFilter === 'coming-soon' && status !== 'Coming Soon') return false;
-    
-    return true;
-  });
+  const handleGenreSelect = (genreId) => {
+    setSelectedGenreId(genreId);
+  };
 
   if (loading) return (
     <div className="text-center py-5">
@@ -71,6 +97,7 @@ const IndexPage = () => {
       <MovieFilterNav 
         activeFilter={activeFilter}
         setActiveFilter={setActiveFilter}
+        onGenreSelect={handleGenreSelect}
       />
       
       <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
@@ -133,9 +160,8 @@ const IndexPage = () => {
                         padding: '0.25rem 0.5rem'
                       }}
                       onClick={(e) => {
-                       
-                          navigate(`/movies/${movie.id}`);
-                        
+                        e.stopPropagation();
+                        navigate(`/movies/${movie.id}`);
                       }}
                     >
                       {isAvailable ? 'Tickets' : 'More Info'}

@@ -31,7 +31,23 @@ namespace CineAura.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        #endregion 
+        #endregion
+
+        #region Get Genres
+        [HttpGet("genres")]
+        public async Task<IActionResult> GetGenres()
+        {
+            try
+            {
+                var genres = await _service.GetGenres();
+                return Ok(genres);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        #endregion
 
         #region GetById
 
