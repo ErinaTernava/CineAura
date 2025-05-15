@@ -12,6 +12,6 @@ namespace CineAura.Data.DTO
 
         public string Email { get; set; }
 
-        public bool IsAdmin { get; set; }
+        public string Role { get; set; }
     }
 }

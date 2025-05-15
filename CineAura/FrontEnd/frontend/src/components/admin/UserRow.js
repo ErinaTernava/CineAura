@@ -24,7 +24,7 @@ const UserRow = ({ user, onDelete }) => {
           borderRadius: '20px',
           fontWeight: '500',
           fontSize: '0.85rem',
-          backgroundColor: user.role === 'Admin' ? 'rgba(175, 125, 249, 0.58)' : 'rgb(27, 32, 90)',
+          backgroundColor: user.role === 'Admin' ? '#ebd0ad(159, 161, 41, 0.58)' : '',
           color: user.role === 'Admin' ? '#ffc107' : '#17a2b8',
           border: `1px solid ${user.role === 'Admin' ? '#ffc107' : '#17a2b8'}`
         }}>

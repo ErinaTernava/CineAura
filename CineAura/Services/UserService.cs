@@ -3,6 +3,8 @@ using CineAura.Data.DTO;
 using CineAura.Services.Interfaces;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using CineAura.Models;
+
 
 namespace CineAura.Services
 {
@@ -39,7 +41,11 @@ namespace CineAura.Services
         {
             try
             {
+                var config = TypeAdapterConfig<User, UserDTO>.NewConfig()
+          .Map(dest => dest.Role, src => src.IsAdmin ? "Admin" : "User");
+
                 return (await _context.User.ToListAsync()).Adapt<List<UserDTO>>();
+
             }
             catch (Exception ex)
             {

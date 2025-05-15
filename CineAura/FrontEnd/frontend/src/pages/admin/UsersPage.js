@@ -54,10 +54,10 @@ const UsersPage = () => {
         <table className="table table-dark table-hover">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Actions</th>
+              <th style={{ color: '#ebd0ad' }}>Name</th>
+              <th style={{ color: '#ebd0ad' }}>Email</th>
+              <th style={{ color: '#ebd0ad' }}>Role</th>
+              <th style={{ color: '#ebd0ad' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
