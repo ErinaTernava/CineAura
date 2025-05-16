@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiSave } from 'react-icons/fi';
 
 const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) => {
@@ -6,6 +6,8 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+   const [isHovered, setIsHovered] = useState(false);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -125,8 +127,13 @@ const MovieForm = ({ formData = {}, setFormData, handleSubmit, genres = [] }) =>
 
       <button
         type="submit"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className="btn w-100"
-        style={{ backgroundColor: '#ebd0ad', color: '#1a1a2e' }}
+        style={{   backgroundColor: isHovered ? '#d4b77c' : '#ebd0ad', 
+          color: '#1a1a2e', 
+          transition: 'background-color 0.3s ease' 
+        }}
       >
         <FiSave className="me-2" />
         Save Movie

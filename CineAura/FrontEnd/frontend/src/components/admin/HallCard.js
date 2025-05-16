@@ -1,10 +1,14 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const HallCard = ({ hall, onDelete }) => {
   const navigate = useNavigate();
+
+  const [isEditHovered, setEditHovered] = useState(false);
+  const [isDeleteHovered, setDeleteHovered] = useState(false);
+
 
   const getStatusColor = (hallType) => {
     return hallType === '3D' ? '#9b59b6' : '#3498db'; 
@@ -111,15 +115,18 @@ const HallCard = ({ hall, onDelete }) => {
        <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
         <button 
           onClick={() => navigate(`/admin/halls/edit/${hall.id}`)}
+          onMouseEnter={() => setEditHovered(true)}
+          onMouseLeave={() => setEditHovered(false)}
           className="btn btn-sm"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            backgroundColor: 'transparent',
-            color: '#ebd0ad',
+            backgroundColor: isEditHovered ? '#ebd0ad' : 'transparent',
+            color: isEditHovered ? '#0b1214' : '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '6px',
+            transition: 'all 0.3s ease',
           }}
         >
           <FiEdit2 style={{ marginRight: '6px' }} />
@@ -128,15 +135,18 @@ const HallCard = ({ hall, onDelete }) => {
         
        <button 
           onClick={() => handleDelete(hall.id)}
+           onMouseEnter={() => setDeleteHovered(true)}
+          onMouseLeave={() => setDeleteHovered(false)}
           className="btn btn-sm"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            backgroundColor: 'transparent',
-            color: '#e74c3c',
+            backgroundColor: isDeleteHovered ? '#e74c3c' : 'transparent',
+            color: isDeleteHovered ? '#fff' : '#e74c3c',
             border: '1px solid #e74c3c',
             borderRadius: '6px',
+            transition: 'all 0.3s ease',
           }}
         >
           <FiTrash2 style={{ marginRight: '6px' }} />

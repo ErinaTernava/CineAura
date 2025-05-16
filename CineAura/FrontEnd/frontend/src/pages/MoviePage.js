@@ -10,6 +10,7 @@ const MoviePage = () => {
   const [status, setStatus] = useState('');
   const [showtimes, setShowtimes] = useState([]);
   const [showPickShowtimeMessage, setShowPickShowtimeMessage] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,11 +136,19 @@ const MoviePage = () => {
           <p className="lead">{movie.description}</p>
           
           <div className="mt-4">
-            <button 
-              className="btn btn-lg px-5" 
-              style={buttonConfig.style}
+            <button
+              className="btn btn-lg px-5"
+              style={{
+                backgroundColor: isHovered ? '#d6b889' : '#ebd0ad',
+                color: isHovered ? '#000' : '#1a1a2e',
+                border: 'none',
+                transition: 'all 0.3s ease',
+                fontWeight: 'bold'
+              }}
               onClick={handleButtonClick}
               disabled={status === 'Available' && showtimes.length === 0}
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
             >
               {buttonConfig.text}
             </button>

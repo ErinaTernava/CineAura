@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 
@@ -35,6 +35,10 @@ const MovieCard = ({ movie, onDelete }) => {
       }
     }
   };
+
+    const [isEditHovered, setEditHovered] = useState(false);
+  const [isDeleteHovered, setDeleteHovered] = useState(false);
+
 
   return (
      <div className="card h-100"  
@@ -103,6 +107,8 @@ const MovieCard = ({ movie, onDelete }) => {
        <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
         <button
           onClick={() => navigate(`/admin/movies/edit/${movie.id}`)}
+            onMouseEnter={() => setEditHovered(true)}
+          onMouseLeave={() => setEditHovered(false)}
           className="btn btn-sm"
           style={{
             flex: 1,
@@ -110,8 +116,8 @@ const MovieCard = ({ movie, onDelete }) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '8px 12px',
-            backgroundColor: 'transparent',
-            color: '#ebd0ad',
+             backgroundColor: isEditHovered ? '#ebd0ad' : 'transparent',
+            color: isEditHovered ? '#1a1a2e' : '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '6px',
             cursor: 'pointer'
@@ -123,6 +129,8 @@ const MovieCard = ({ movie, onDelete }) => {
         
        <button
           onClick={() => handleDelete(movie.id)}
+           onMouseEnter={() => setDeleteHovered(true)}
+          onMouseLeave={() => setDeleteHovered(false)}
           className="btn btn-sm"
           style={{
             flex: 1,
@@ -130,8 +138,8 @@ const MovieCard = ({ movie, onDelete }) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '8px 12px',
-            backgroundColor: 'transparent',
-            color: '#e74c3c',
+            backgroundColor: isDeleteHovered ? '#e74c3c' : 'transparent',
+            color: isDeleteHovered ? 'white' : '#e74c3c',
             border: '1px solid #e74c3c',
             borderRadius: '6px',
             cursor: 'pointer'

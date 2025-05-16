@@ -1,8 +1,9 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const SuccessPage = () => {
   const navigate = useNavigate();
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div style={{
@@ -34,14 +35,17 @@ const SuccessPage = () => {
         onClick={() => navigate('/')}
         style={{
           padding: '12px 24px',
-          backgroundColor: '#ebd0ad',
-          color: 'black',
+          backgroundColor: isHovered ? '#d6b889' : '#ebd0ad', 
+          color: isHovered ? 'black' : 'black',
           font:'bold',
           border: 'none',
           borderRadius: '4px',
           fontSize: '16px',
-          cursor: 'pointer'
+          cursor: 'pointer',
+          transition: 'background-color 0.3s ease'
         }}
+        onMouseEnter={() => setIsHovered(true)}  
+        onMouseLeave={() => setIsHovered(false)} 
       >
         Return to Home Page
       </button>

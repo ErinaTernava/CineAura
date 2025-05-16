@@ -37,7 +37,7 @@ const HelpPage = () => {
                   <li className="mb-3">
                     <strong>Do you offer group bookings?</strong>
                     <p>Yes! For groups of 10 or more, please contact us directly for special rates and seating arrangements.</p>
-                  </li>
+                  </li>  
                 </ul>
               </section>
 
@@ -49,8 +49,20 @@ const HelpPage = () => {
                 </p>
               </section>
 
+<section className="mb-5">
+                <h2 style={{color:'#ebd0ad', borderBottom: '1px solid #2c3e50', paddingBottom: '0.5rem'}}>3.Forgot Password</h2>
+                <p>
+                  If you forgot your password, go to the Login page and click "Forgot Password?".
+                  Enter your email and you’ll receive a confirmation code.
+                  Use that code to reset your password and create a new one. 
+                  Check your spam folder if you don’t see the email.
+                  
+                </p>
+
+              </section>
+
               <section className="mb-5">
-                <h2 style={{ color: '#ebd0ad', borderBottom: '1px solid #2c3e50', paddingBottom: '0.5rem' }}>3. Contact Support</h2>
+                <h2 style={{ color: '#ebd0ad', borderBottom: '1px solid #2c3e50', paddingBottom: '0.5rem' }}>4. Contact Support</h2>
                 <p>
                   Need more help? Reach out to us:
                 </p>
@@ -62,13 +74,15 @@ const HelpPage = () => {
               </section>
 
               <section className="mb-5">
-                <h2 style={{ color: '#ebd0ad', borderBottom: '1px solid #2c3e50', paddingBottom: '0.5rem' }}>4. Visit Us</h2>
+                <h2 style={{ color: '#ebd0ad', borderBottom: '1px solid #2c3e50', paddingBottom: '0.5rem' }}>5. Visit Us</h2>
                 <p>
                   CineAura Headquarters<br />
                   Lagjja Kalabria,10000 Prishtine, Kosovo<br />
                   Open: Monday - Sunday, 10:00 AM to 11:00 PM
                 </p>
               </section>
+
+              
             </div>
           </div>
         </div>

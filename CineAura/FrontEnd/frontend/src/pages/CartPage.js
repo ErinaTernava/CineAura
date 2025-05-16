@@ -14,6 +14,9 @@ const CartPage = () => {
   const [temporaryTickets, setTemporaryTickets] = useState([]);
   const [cartTickets, setCartTickets] = useState([]);
   const [stripe, setStripe] = useState(null); 
+  const [hoveredRemoveId, setHoveredRemoveId] = useState(null);
+const [isPaymentHovered, setIsPaymentHovered] = useState(false);
+
 
   const getUserId = () => {
     if (!token) return null;
@@ -301,12 +304,14 @@ const CartPage = () => {
             <button
               style={{
                 padding: '5px 10px',
-                backgroundColor: '#dc3545',
+                backgroundColor: hoveredRemoveId === ticket.id ? '#bd2130' : '#dc3545',
                 color: 'white',
                 border: 'none',
                 borderRadius: '4px',
                 cursor: 'pointer'
               }}
+                onMouseEnter={() => setHoveredRemoveId(ticket.id)}
+                onMouseLeave={() => setHoveredRemoveId(null)}
               onClick={() => handleRemoveTicket(ticket.id)}
             >
               Remove
@@ -326,9 +331,11 @@ const CartPage = () => {
       }}>
         <h3 style={{ margin: 0 }}>Total: ${calculateTotal().toFixed(2)}</h3>
         <button onClick={handleProceedToPayment}
+        onMouseEnter={() => setIsPaymentHovered(true)}
+        onMouseLeave={() => setIsPaymentHovered(false)}
           style={{
             padding: '10px 20px',
-            backgroundColor: '#ebd0ad',
+            backgroundColor: isPaymentHovered ? '#d1b488' : '#ebd0ad',
             color: '#1a1a2e',
             border: 'none',
             borderRadius: '4px',

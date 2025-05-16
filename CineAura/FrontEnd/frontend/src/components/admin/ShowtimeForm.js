@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiSave } from 'react-icons/fi';
 
 const ShowtimeForm = ({ formData = {}, setFormData, handleSubmit, movies , halls }) => {
@@ -7,6 +7,8 @@ const ShowtimeForm = ({ formData = {}, setFormData, handleSubmit, movies , halls
     setFormData({ ...formData, [name]: value });
 
   };
+
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     
@@ -75,8 +77,13 @@ const ShowtimeForm = ({ formData = {}, setFormData, handleSubmit, movies , halls
 
       <button
         type="submit"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         className="btn w-100"
-        style={{ backgroundColor: '#ebd0ad', color: '#1a1a2e' }}
+        style={{  backgroundColor: isHovered ? '#d4b77c' : '#ebd0ad', 
+          color: '#1a1a2e', 
+          transition: 'background-color 0.3s ease' 
+        }}
       >
         <FiSave className="me-2" />
         Save Showtime

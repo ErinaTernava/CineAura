@@ -9,6 +9,10 @@ const MovieFilterNav = ({
   const [genres, setGenres] = useState([]);
   const [selectedGenreId, setSelectedGenreId] = useState('');
 
+  const [hoverAll, setHoverAll] = useState(false);
+  const [hoverAvailable, setHoverAvailable] = useState(false);
+  const [hoverComingSoon, setHoverComingSoon] = useState(false);
+
   useEffect(() => {
     const fetchGenres = async () => {
       try {
@@ -45,39 +49,48 @@ const MovieFilterNav = ({
       <div className="container d-flex flex-wrap justify-content-center align-items-center gap-3">
         <button 
           style={{ 
-            backgroundColor: activeFilter === 'all' ? '#ebd0ad' : 'transparent',
-            color: activeFilter === 'all' ? '#0b1214' : '#ebd0ad',
+            backgroundColor: activeFilter === 'all' ? '#ebd0ad' : hoverAll  ? 'rgba(235, 208, 173, 0.2)' : 'transparent',
+             color: activeFilter === 'all' || hoverAll ? '#0b1214' : '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '20px',
-            padding: '0.25rem 1rem'
+            padding: '0.25rem 1rem',
+            transition: 'background-color 0.2s'
           }}
           onClick={() => handleButtonClick('all')}
+           onMouseEnter={() => setHoverAll(true)}
+          onMouseLeave={() => setHoverAll(false)}
         >
           All Movies
         </button>
         
         <button 
           style={{ 
-            backgroundColor: activeFilter === 'available' ? '#ebd0ad' : 'transparent',
-            color: activeFilter === 'available' ? '#0b1214' : '#ebd0ad',
+            backgroundColor: activeFilter === 'available' ? '#ebd0ad' : hoverAvailable ? 'rgba(235, 208, 173, 0.2)' : 'transparent',
+            color: activeFilter === 'available' || hoverAvailable ? '#0b1214' : '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '20px',
-            padding: '0.25rem 1rem'
+            padding: '0.25rem 1rem',
+            transition: 'background-color 0.2s'
           }}
           onClick={() => handleButtonClick('available')}
+        onMouseEnter={() => setHoverAvailable(true)}
+        onMouseLeave={() => setHoverAvailable(false)}
         >
           Currently Available
         </button>
         
         <button 
           style={{ 
-            backgroundColor: activeFilter === 'coming-soon' ? '#ebd0ad' : 'transparent',
-            color: activeFilter === 'coming-soon' ? '#0b1214' : '#ebd0ad',
+             backgroundColor: activeFilter === 'coming-soon' ? '#ebd0ad' : hoverComingSoon ? 'rgba(235, 208, 173, 0.2)' : 'transparent',
+            color: activeFilter === 'coming-soon' || hoverComingSoon ? '#0b1214' : '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '20px',
-            padding: '0.25rem 1rem'
+            padding: '0.25rem 1rem',
+            transition: 'background-color 0.2s'
           }}
           onClick={() => handleButtonClick('coming-soon')}
+        onMouseEnter={() => setHoverComingSoon(true)}
+          onMouseLeave={() => setHoverComingSoon(false)}
         >
           Coming Soon
         </button>

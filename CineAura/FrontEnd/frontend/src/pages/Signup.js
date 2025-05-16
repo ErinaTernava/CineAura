@@ -10,6 +10,7 @@ const Signup = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState('');
+  const [isHovered, setIsHovered] = useState(false); 
   const navigate = useNavigate();  
 
   const handleSignup = async (e) => {
@@ -183,11 +184,15 @@ const Signup = () => {
               type="submit" 
               className="btn w-100 py-2 mt-3"
               style={{ 
-                backgroundColor: '#ebd0ad', 
-                color: '#0b1214',
-                fontWeight: 'bold'
+                backgroundColor: isHovered ? '#d6b889' : '#ebd0ad', // ndryshon ngjyra kur hover
+                color: isHovered ? '#000' : '#0b1214',
+                ontWeight: 'bold',
+                transition: 'all 0.3s ease',
+                cursor: 'pointer'
               }}
               disabled={!acceptTerms}
+               onMouseEnter={() => setIsHovered(true)}  
+              onMouseLeave={() => setIsHovered(false)} 
             >
               Sign Up
             </button>

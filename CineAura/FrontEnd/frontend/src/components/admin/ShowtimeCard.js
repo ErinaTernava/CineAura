@@ -9,6 +9,9 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
   const [hall, setHall] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [isEditHovered, setEditHovered] = useState(false);
+  const [isDeleteHovered, setDeleteHovered] = useState(false);
+
   const formatDateTime = (datetime) => {
     const date = new Date(datetime);
     return date.toLocaleString();
@@ -82,6 +85,8 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
        <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
         <button
           onClick={() => navigate(`/admin/showtimes/edit/${showtime.id}`)}
+           onMouseEnter={() => setEditHovered(true)}
+          onMouseLeave={() => setEditHovered(false)}
           className="btn btn-sm"
           style={{
             flex: '1 1 45%',
@@ -89,8 +94,8 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '8px 12px',
-            backgroundColor: 'transparent',
-            color: '#ebd0ad',
+             backgroundColor: isEditHovered ? '#ebd0ad' : 'transparent',
+            color: isEditHovered ? '#1a1a2e' : '#ebd0ad',
             border: '1px solid #ebd0ad',
             borderRadius: '6px'
           }}
@@ -102,6 +107,8 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
 
         <button
           onClick={() => handleDelete(showtime.id)}
+          onMouseEnter={() => setDeleteHovered(true)}
+          onMouseLeave={() => setDeleteHovered(false)}
           className="btn btn-sm"
           style={{
             flex: '1 1 45%',
@@ -109,8 +116,8 @@ const ShowtimeCard = ({ showtime, onDelete }) => {
             alignItems: 'center',
             justifyContent: 'center',
             padding: '8px 12px',
-            backgroundColor: 'transparent',
-            color: '#e74c3c',
+            backgroundColor: isDeleteHovered ? '#e74c3c' : 'transparent',
+            color: isDeleteHovered ? 'white' : '#e74c3c',
             border: '1px solid #e74c3c',
             borderRadius: '6px'
           }}

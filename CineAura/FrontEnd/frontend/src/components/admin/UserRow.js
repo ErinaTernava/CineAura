@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 
 const UserRow = ({ user, onDelete }) => {
+   const [isHoveredRow, setIsHoveredRow] = useState(false);
+  const [isHoveredBtn, setIsHoveredBtn] = useState(false);
   return (
-    <tr style={{ 
-      borderBottom: '1px solid #2c3e50',
-       borderRadius:'12px',
-      transition: 'background-color 0.2s',
-      ':hover': {
-        backgroundColor: 'rgba(44, 62, 80, 0.5)'
-      }
-    }}>
+    <tr
+      onMouseEnter={() => setIsHoveredRow(true)}
+      onMouseLeave={() => setIsHoveredRow(false)}
+      style={{
+        borderBottom: '1px solid #2c3e50',
+        borderRadius: '12px',
+        transition: 'background-color 0.2s',
+        backgroundColor: isHoveredRow ? 'rgba(44, 62, 80, 0.5)' : 'transparent',
+      }}
+    >
       <td style={{ padding: '16px', color: '#d1d5db'}}>
         {user.firstName} {user.lastName}
       </td>
@@ -34,19 +38,18 @@ const UserRow = ({ user, onDelete }) => {
       <td style={{ padding: '16px' }}>
         <button
           onClick={() => onDelete(user.id)}
+            onMouseEnter={() => setIsHoveredBtn(true)}
+          onMouseLeave={() => setIsHoveredBtn(false)}
           style={{
             display: 'flex',
             alignItems: 'center',
             padding: '6px 12px',
-            backgroundColor: 'transparent',
-            color: '#e74c3c',
+            backgroundColor: isHoveredBtn ? '#e74c3c' : 'transparent',
+            color: isHoveredBtn ? 'white' : '#e74c3c',
             border: '1px solid #e74c3c',
             borderRadius: '6px',
             cursor: 'pointer',
-            transition: 'all 0.2s',
-            ':hover': {
-              backgroundColor: 'rgba(231, 76, 60, 0.1)'
-            }
+            transition: 'all 0.2s'           
           }}
         >
           <FiTrash2 style={{ marginRight: '6px' }} />

@@ -15,7 +15,7 @@ const Login = () => {
   const [errorFields, setErrorFields] = useState({ email: false, password: false });
   const navigate = useNavigate();
   const [showResetCard, setShowResetCard] = useState(false);
-
+ const [isHovered, setIsHovered] = useState(false);
   
 
   useEffect(() => {
@@ -132,12 +132,17 @@ const Login = () => {
             </div>
             <button 
               type="submit" 
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
               className="btn w-100 py-2 mt-3"
               style={{ 
-                backgroundColor: '#ebd0ad', 
-                color: '#0b1214',
-                fontWeight: 'bold'
+                  backgroundColor: isHovered ? '#d9b98e' : '#ebd0ad',
+                  color: isHovered? '#000' :'b1214',
+                  fontWeight: 'bold',
+                  transition: 'background-color 0.3s ease',
+
               }}
+             
             >
               Login
             </button>

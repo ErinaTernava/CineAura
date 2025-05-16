@@ -1,10 +1,14 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthToken from '../hooks/useAuthToken';
 import SearchBar from './SearchBar';
+import { useState } from 'react';
 
 const Header = () => {
   const { token, userRole, clearToken } = useAuthToken();
   const navigate = useNavigate();
+
+  const [hoveredLogout, setHoveredLogout] = useState(false);
+  const [hoveredLogin, setHoveredLogin] = useState(false);
 
   const handleLogout = () => {
     clearToken();
@@ -66,9 +70,11 @@ const Header = () => {
               </Link>
               <button
                 onClick={handleLogout}
+                 onMouseEnter={() => setHoveredLogout(true)}
+                onMouseLeave={() => setHoveredLogout(false)}
                 className="btn mx-2 mt-2 mt-md-0"
                 style={{
-                  backgroundColor: '#ebd0ad',
+                 backgroundColor: hoveredLogout ? '#d7ba94' : '#ebd0ad',
                   color: '#0b1214',
                   fontWeight: 'bold',
                   padding: '0.375rem 0.75rem'
@@ -80,9 +86,11 @@ const Header = () => {
           ) : (
             <Link
               to="/login"
+               onMouseEnter={() => setHoveredLogin(true)}
+              onMouseLeave={() => setHoveredLogin(false)}
               className="btn mx-2 mt-2 mt-md-0"
               style={{
-                backgroundColor: '#ebd0ad',
+                backgroundColor: hoveredLogin ? '#d7ba94' : '#ebd0ad',
                 color: '#0b1214',
                 fontWeight: 'bold',
                 padding: '0.375rem 0.75rem'

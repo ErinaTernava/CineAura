@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiSave } from 'react-icons/fi';
 
 const HallForm = ({ formData = {}, setFormData, handleSubmit }) => {
@@ -6,6 +6,7 @@ const HallForm = ({ formData = {}, setFormData, handleSubmit }) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <form onSubmit={(e) => {
@@ -66,8 +67,15 @@ const HallForm = ({ formData = {}, setFormData, handleSubmit }) => {
 
       <button
         type="submit"
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         className="btn w-100"
-        style={{ backgroundColor: '#ebd0ad', color: '#1a1a2e' }}
+        style={{
+         backgroundColor: isHovered ? '#d6b889' : '#ebd0ad',
+          color: isHovered ? '#000' : '#1a1a2e',
+          border: 'none',
+          transition: 'all 0.3s ease'
+         }}
       >
         <FiSave className="me-2" />
         Save Hall
