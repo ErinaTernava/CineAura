@@ -31,10 +31,18 @@ namespace CineAura.Controllers
                     .ThenInclude(ct => ct.Ticket)
                     .ThenInclude(t => t.Showtime)
                     .ThenInclude(s => s.Movie)
-                    .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsPaid);
+                    .FirstOrDefaultAsync(c =>c.UserId == userId);
 
                 if (cart == null || !cart.CartTicket.Any())
                     return BadRequest("Cart is empty.");
+
+                var unpaidTickets = cart.CartTicket
+                    .Where(ct => ct.Ticket.OrderId == null)
+                    .Select(ct => ct.Ticket)
+                    .ToList();
+
+                if (!unpaidTickets.Any())
+                    return BadRequest("All tickets in this cart have already been paid for.");
 
                 var user = await _context.User.FindAsync(userId);
                 var tickets = cart.CartTicket.Select(ct => ct.Ticket).ToList();

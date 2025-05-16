@@ -56,7 +56,7 @@ namespace CineAura.Services
             try
             {
                 return await _context.CartTicket
-                   .Where(ct => ct.Cart.UserId == id && !ct.Cart.IsPaid)
+                   .Where(ct => ct.Cart.UserId == id)
                    .Include(ct => ct.Ticket)
                    .ThenInclude(t => t.Showtime)
                    .ThenInclude(s => s.Movie)
@@ -116,7 +116,9 @@ namespace CineAura.Services
             try
             {
                 return await _context.Ticket
-                .Where(t => t.ShowtimeId == showtimeId)
+                .Where(t => t.ShowtimeId == showtimeId &&
+                        t.Order != null &&
+                        t.Order.StripeSessionId != null)
                 .Select(t => t.SeatId)
                 .ToListAsync();
             }
