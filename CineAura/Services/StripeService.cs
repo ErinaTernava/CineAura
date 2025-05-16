@@ -83,11 +83,12 @@ namespace CineAura.Services
                         .Include(c => c.CartTicket)
                         .ThenInclude(ct => ct.Ticket)
                         .ThenInclude(t => t.Showtime)
-                        .FirstOrDefaultAsync(c => c.UserId == user.Id && !c.IsPaid);                    
+                        .FirstOrDefaultAsync(c => c.UserId == user.Id);                    
 
                     if (cart != null)
                     {
-                        var total = cart.CartTicket.Sum(ct => ct.Ticket.Showtime.TicketPrice);
+                        var tickets = cart.CartTicket.Select(ct => ct.Ticket).ToList();
+                        var total = tickets.Sum(t => t.Showtime.TicketPrice);
 
                         var order = new Order
                         {
@@ -98,10 +99,12 @@ namespace CineAura.Services
                             CartId = cart.Id
                         };
                         _context.Order.Add(order);
-
+                        await _context.SaveChangesAsync();
+                        foreach (var ticket in tickets)
+                        {
+                            ticket.OrderId = order.Id;
+                        }
                         _context.CartTicket.RemoveRange(cart.CartTicket);
-
-                        cart.IsPaid = true;
                         _context.SaveChanges();
                     }
                 }

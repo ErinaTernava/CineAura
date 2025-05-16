@@ -45,7 +45,6 @@ namespace CineAura.Services
                 Cart cart = new Cart
                 {
                     UserId = user.Id,
-                    IsPaid = false
                 };
 
                 _context.Carts.Add(cart);

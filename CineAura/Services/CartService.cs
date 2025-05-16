@@ -23,7 +23,7 @@ namespace CineAura.Services
             {
                 var cart = await _context.Carts
                     .Include(c => c.User)
-                    .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsPaid);
+                    .FirstOrDefaultAsync(c => c.UserId == userId);
 
                 return cart?.Adapt<CartDTO>();
             }
@@ -41,15 +41,14 @@ namespace CineAura.Services
             try
             {
                 var existingCart = await _context.Carts
-                    .FirstOrDefaultAsync(c => c.UserId == userId && !c.IsPaid);
+                    .FirstOrDefaultAsync(c => c.UserId == userId);
 
                 if (existingCart != null)
                     return existingCart.Adapt<CartDTO>();
 
                 var newCart = new Cart
                 {
-                    UserId = userId,
-                    IsPaid = false
+                    UserId = userId
                 };
 
                 _context.Carts.Add(newCart);
@@ -63,28 +62,7 @@ namespace CineAura.Services
                 throw new Exception("An error occurred");
             }
         }
-        #endregion
-
-        #region MarkCartAsPaid
-        public async Task<bool> MarkCartAsPaid(int cartId)
-        {
-            try
-            {
-                var cart = await _context.Carts.FindAsync(cartId);
-                if (cart == null) return false;
-
-                cart.IsPaid = true;
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw new Exception("An error occurred");
-            }
-        }
-        #endregion
+        #endregion    
 
         #region Delete
         public async Task<bool> Delete(int cartId)
