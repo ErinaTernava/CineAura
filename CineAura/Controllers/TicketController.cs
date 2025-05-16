@@ -86,24 +86,6 @@ namespace CineAura.Controllers
         }
         #endregion
 
-        #region Delete
-        [HttpPost("delete")]
-        public async Task<IActionResult> Delete(int ticketId)
-        {
-            try
-            {
-                var result = await _service.Delete(ticketId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-
-                return BadRequest(ex.Message);
-            }
-        }
-        
-         #endregion
-
         #region Remove
         [HttpDelete("remove")]
         public async Task<IActionResult> RemoveTicket(int ticketId)
