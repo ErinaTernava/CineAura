@@ -55,25 +55,6 @@ namespace CineAura.Controllers
             }
             #endregion
 
-            #region MarkCartAsPaid
-            [HttpPut("pay")]
-            public async Task<IActionResult> MarkAsPaid(int cartId)
-            {
-                try
-                {
-                    var success = await _service.MarkCartAsPaid(cartId);
-                    if (!success)
-                        return NotFound("Cart not found.");
-
-                    return Ok("Cart marked as paid.");
-                }
-                catch (Exception ex)
-                {
-                return BadRequest(ex.Message);
-                }
-            }
-            #endregion
-
             #region Delete
             [HttpDelete("delete")]
             public async Task<IActionResult> Delete(int cartId)

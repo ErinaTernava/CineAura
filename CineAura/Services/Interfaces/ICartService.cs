@@ -7,7 +7,6 @@ namespace CineAura.Services.Interfaces
     {
         Task<CartDTO> GetByUserId(int userId);
         Task<CartDTO> Create(int userId);
-        Task<bool> MarkCartAsPaid(int cartId);
         Task<bool> Delete(int cartId);
     }
 }
