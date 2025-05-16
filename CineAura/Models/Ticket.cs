@@ -15,12 +15,12 @@ namespace CineAura.Models
         public int ShowtimeId { get; set; }
         public Showtime Showtime { get; set; }
 
-
         [Required]
         public int SeatId { get; set; }
         public Seat Seat { get; set; }
 
         public DateTime PurchaseTime { get; set; }
         public int? OrderId { get; set; }
+        public  Order Order { get; set; }
     }
 }
