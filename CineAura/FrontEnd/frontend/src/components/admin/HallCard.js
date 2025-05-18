@@ -1,7 +1,6 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const HallCard = ({ hall, onDelete }) => {
   const navigate = useNavigate();
@@ -9,21 +8,8 @@ const HallCard = ({ hall, onDelete }) => {
   const [isEditHovered, setEditHovered] = useState(false);
   const [isDeleteHovered, setDeleteHovered] = useState(false);
 
-
   const getStatusColor = (hallType) => {
     return hallType === '3D' ? '#9b59b6' : '#3498db'; 
-  };
-
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this hall?')) {
-        const response = await axios.delete(`http://localhost:5283/api/Hall/delete?id=${id}`, {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Accept': 'application/json',
-          },
-        });    
-        window.location.reload();        
-    }
   };
 
   return (
@@ -111,8 +97,7 @@ const HallCard = ({ hall, onDelete }) => {
         </div>
       </div>
 
-      
-       <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
+      <div className="card-footer bg-transparent border-top-0 d-flex flex-wrap gap-2 justify-content-between">
         <button 
           onClick={() => navigate(`/admin/halls/edit/${hall.id}`)}
           onMouseEnter={() => setEditHovered(true)}
@@ -133,9 +118,9 @@ const HallCard = ({ hall, onDelete }) => {
           Edit
         </button>
         
-       <button 
-          onClick={() => handleDelete(hall.id)}
-           onMouseEnter={() => setDeleteHovered(true)}
+        <button 
+          onClick={() => onDelete(hall.id)}
+          onMouseEnter={() => setDeleteHovered(true)}
           onMouseLeave={() => setDeleteHovered(false)}
           className="btn btn-sm"
           style={{
