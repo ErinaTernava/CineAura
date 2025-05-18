@@ -64,7 +64,7 @@ const AdminLayout = () => {
             }}
           >
             <FiFilm style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            View Movies
+             Movies
           </Link>
           <Link
             to="/admin/halls"
@@ -86,7 +86,7 @@ const AdminLayout = () => {
             }}
           >
             <FiHome style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            View Halls
+             Halls
           </Link>
 
           <Link
@@ -103,7 +103,7 @@ const AdminLayout = () => {
             }}
           >
             <FiCalendar style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            View Showtimes
+             Showtimes
           </Link>
            
           <Link
