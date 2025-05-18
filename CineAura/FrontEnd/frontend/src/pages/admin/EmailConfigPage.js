@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiEdit2, FiTrash2, FiMail } from 'react-icons/fi';
 import EmailConfigForm from '../../components/admin/EmailConfigForm';
+import DeleteEmailConfigModal from '../../components/admin/DeleteEmailConfigModal';
 
 const EmailConfigPage = () => {
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
   const fetchConfig = async () => {
@@ -44,9 +47,12 @@ const EmailConfigPage = () => {
     fetchConfig();
   }, []);
 
-  const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this configuration?')) return;
-    
+  const handleDeleteClick = () => {
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsDeleting(true);
     try {
       const response = await fetch(`http://localhost:5283/api/EmailConfig/delete?id=${config.id}`, {
         method: 'DELETE',
@@ -63,6 +69,9 @@ const EmailConfigPage = () => {
       setEditMode(false);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
     }
   };
 
@@ -73,28 +82,27 @@ const EmailConfigPage = () => {
   };
   
   const handleTestConfiguration = async () => {
-  try {
-    const response = await fetch('http://localhost:5283/api/EmailConfig/test', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        'Content-Type': 'application/json'
+    try {
+      const response = await fetch('http://localhost:5283/api/EmailConfig/test', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const resultText = await response.text();
+      const result = resultText ? JSON.parse(resultText) : {};
+
+      if (!response.ok) {
+        throw new Error(result.message || 'Test failed');
       }
-    });
 
-    const resultText = await response.text();
-    const result = resultText ? JSON.parse(resultText) : {};
-
-    if (!response.ok) {
-      throw new Error(result.message || 'Test failed');
+      alert('Email configuration is valid! Test succeeded.');
+    } catch (err) {
+      alert(`Test failed: ${err.message}`);
     }
-
-    alert('Email configuration is valid! Test succeeded.');
-  } catch (err) {
-    alert(`Test failed: ${err.message}`);
-  }
-};
-
+  };
 
   if (loading) return <div className="text-center py-5" style={{ color: '#ebd0ad' }}>Loading...</div>;
   if (error) return <div className="alert alert-danger">Error: {error}</div>;
@@ -144,26 +152,53 @@ const EmailConfigPage = () => {
         }}>
           <div className="d-flex justify-content-between align-items-start mb-4">
             <h5 style={{ color: '#ebd0ad' }}>Current Configuration</h5>
-            <div className="d-flex flex-column align-items-start gap-2">
+            <div className="d-flex gap-2">
               <button 
                 onClick={() => setEditMode(true)}
-                className="btn btn-outline-warning me-2"
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: 'transparent',
+                  color: '#ebd0ad',
+                  border: '1px solid #ebd0ad',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
               >
-                <FiEdit2 className="me-1" />
+                <FiEdit2 style={{ marginRight: '6px' }} />
                 Edit
               </button>
               <button 
-                onClick={handleDelete}
-                className="btn btn-outline-danger"
+                onClick={handleDeleteClick}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: 'transparent',
+                  color: '#e74c3c',
+                  border: '1px solid #e74c3c',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
               >
-                <FiTrash2 className="me-1" />
+                <FiTrash2 style={{ marginRight: '6px' }} />
                 Delete
               </button>
-               <button 
-                 onClick={handleTestConfiguration}
-                 className="btn btn-outline-info"
+              <button 
+                onClick={handleTestConfiguration}
+                style={{
+                  padding: '8px 16px',
+                  backgroundColor: 'transparent',
+                  color: '#17a2b8',
+                  border: '1px solid #17a2b8',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
               >
-                <FiMail className="me-1" />
+                <FiMail style={{ marginRight: '6px' }} />
                 Test
               </button>
             </div>
@@ -192,6 +227,14 @@ const EmailConfigPage = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {showDeleteModal && (
+        <DeleteEmailConfigModal
+          onConfirm={confirmDelete}
+          onCancel={() => setShowDeleteModal(false)}
+          isDeleting={isDeleting}
+        />
       )}
     </div>
   );
