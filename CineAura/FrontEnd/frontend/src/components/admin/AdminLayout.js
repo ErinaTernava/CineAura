@@ -60,29 +60,12 @@ const AdminLayout = () => {
               color: window.location.pathname.includes('/movies') ? '#ebd0ad' : '#ffffff',
               textDecoration: 'none',
               transition: 'all 0.2s',
+             
             }}
           >
             <FiFilm style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            View Movies
+             Movies
           </Link>
-
-          <Link
-            to="/admin/add-movie"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '12px 15px',
-              borderRadius: '6px',
-              backgroundColor: window.location.pathname.includes('/add-movie') ? '#2c3e50' : 'transparent',
-              color: window.location.pathname.includes('/add-movie') ? '#ebd0ad' : '#ffffff',
-              textDecoration: 'none',
-              transition: 'all 0.2s',
-            }}
-          >
-            <FiPlusSquare style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            Add Movie
-          </Link>
-
           <Link
             to="/admin/halls"
             style={{
@@ -103,24 +86,7 @@ const AdminLayout = () => {
             }}
           >
             <FiHome style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            View Halls
-          </Link>
-
-          <Link
-            to="/admin/add-hall"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '12px 15px',
-              borderRadius: '6px',
-              backgroundColor: window.location.pathname.includes('/add-hall') ? '#2c3e50' : 'transparent',
-              color: window.location.pathname.includes('/add-hall') ? '#ebd0ad' : '#ffffff',
-              textDecoration: 'none',
-              transition: 'all 0.2s',
-            }}
-          >
-            <FiPlusSquare style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            Add Hall
+             Halls
           </Link>
 
           <Link
@@ -137,25 +103,9 @@ const AdminLayout = () => {
             }}
           >
             <FiCalendar style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            View Showtimes
+             Showtimes
           </Link>
-
-           <Link
-            to="/admin/add-showtime"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '12px 15px',
-              borderRadius: '6px',
-              backgroundColor: window.location.pathname.includes('/add-showtime') ? '#2c3e50' : 'transparent',
-              color: window.location.pathname.includes('/add-showtime') ? '#ebd0ad' : '#ffffff',
-              textDecoration: 'none',
-              transition: 'all 0.2s',
-            }}
-          >
-            <FiPlusSquare style={{ marginRight: '12px', fontSize: '1.1rem' }} />
-            Add showtime
-          </Link>
+           
           <Link
             to="/admin/users"
             style={{
@@ -191,7 +141,7 @@ const AdminLayout = () => {
           </Link>
         </nav>
       </div>
-
+      
       <div
         style={{
           flex: 1,

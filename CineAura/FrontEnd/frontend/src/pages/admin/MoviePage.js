@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import useAuthToken from '../../hooks/useAuthToken';
 import MovieCard from '../../components/admin/MovieCard';
 
@@ -48,7 +49,14 @@ const MoviesPage = () => {
   if (error) return <div className="alert alert-danger">Error: {error}</div>;
 
   return (
-      <div className="container-fluid py-4">
+     <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 style={{ color: '#ebd0ad' }}>Movie Management</h2>
+        <Link to="/admin/add-movie" className="btn" style={{ backgroundColor: '#ebd0ad', color: '#1a1a2e' }}>
+          Add New Movie
+        </Link>
+      </div>
+    
       <div className="row g-4" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
