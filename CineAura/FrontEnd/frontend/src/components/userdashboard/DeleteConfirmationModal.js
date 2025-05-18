@@ -1,7 +1,12 @@
+import { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 
 const DeleteConfirmationModal = ({ setShowDeleteConfirm, setMessage }) => {
-  const handleDeleteAccount = async () => {
+  
+  const [isCancelHovered, setIsCancelHovered] = useState(false);
+  const [isDeleteHovered, setIsDeleteHovered] = useState(false);
+
+    const handleDeleteAccount = async () => {
     const userId = localStorage.getItem("userId");
 
     try {
@@ -72,30 +77,36 @@ const DeleteConfirmationModal = ({ setShowDeleteConfirm, setMessage }) => {
         }}>
           <button
             onClick={() => setShowDeleteConfirm(false)}
+            onMouseEnter={() => setIsCancelHovered(true)}
+            onMouseLeave={() => setIsCancelHovered(false)}
             style={{
               padding: '10px 20px',
-              backgroundColor: '#7f8c8d',
+              backgroundColor: isCancelHovered ? '#95a5a6' : '#7f8c8d',
               color: '#0b1214',
               border: 'none',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              transition: 'background-color 0.3s'
             }}
           >
             Cancel
           </button>
           <button
             onClick={handleDeleteAccount}
+            onMouseEnter={() => setIsDeleteHovered(true)}
+            onMouseLeave={() => setIsDeleteHovered(false)}
             style={{
               padding: '10px 20px',
-              backgroundColor: '#e74c3c',
+              backgroundColor: isDeleteHovered ? '#c0392b' : '#e74c3c',
               color: 'white',
               border: 'none',
               borderRadius: '4px',
               cursor: 'pointer',
               fontWeight: 'bold',
               display: 'flex',
-              alignItems: 'center'
+              alignItems: 'center',
+              transition: 'background-color 0.3s'
             }}
           >
             <FiTrash2 style={{ marginRight: '8px' }} />

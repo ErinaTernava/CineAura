@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { FiLock, FiCheck } from 'react-icons/fi';
 
 const PasswordForm = ({ passwordForm, setPasswordForm, handleSubmit }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ marginBottom: '20px' }}>
@@ -131,19 +134,22 @@ const PasswordForm = ({ passwordForm, setPasswordForm, handleSubmit }) => {
 
       <button
         type="submit"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
           padding: '12px',
-          backgroundColor: '#ebd0ad',
+           backgroundColor: isHovered ? '#d1b386' : '#ebd0ad',
           color: '#0b1214',
           border: 'none',
           borderRadius: '4px',
           cursor: 'pointer',
           fontWeight: 'bold',
-          fontSize: '1rem'
+          fontSize: '1rem',
+          transition: 'background-color 0.3s ease'
         }}
       >
         <FiCheck style={{ marginRight: '8px' }} />
