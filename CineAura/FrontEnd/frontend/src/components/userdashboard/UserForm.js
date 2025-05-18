@@ -1,6 +1,9 @@
+import {useState} from 'react';
 import { FiMail, FiCheck } from 'react-icons/fi';
 
 const UserForm = ({ formData, setFormData, handleSubmit }) => {
+  const [isHovered, setIsHovered] = useState(false);
+
   return (
     <form onSubmit={handleSubmit}>
       <div style={{ 
@@ -104,19 +107,22 @@ const UserForm = ({ formData, setFormData, handleSubmit }) => {
       </div>
       <button
         type="submit"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           width: '100%',
           padding: '16px', 
-          backgroundColor: '#ebd0ad',
+          backgroundColor: isHovered ? '#d4c28d' : '#ebd0ad',
           color: '#0b1214',
           border: 'none',
           borderRadius: '6px',
           cursor: 'pointer',
           fontWeight: 'bold',
-          fontSize: '1.2rem' 
+          fontSize: '1.2rem',
+          transition: 'background-color 0.3s ease'
         }}
       >
         <FiCheck style={{ marginRight: '10px', fontSize: '1.2rem' }} />

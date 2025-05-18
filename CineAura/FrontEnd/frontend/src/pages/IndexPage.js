@@ -13,6 +13,7 @@ const IndexPage = () => {
   const [error, setError] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedGenreId, setSelectedGenreId] = useState('');
+  const [hoveredMovieId, setHoveredMovieId] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -110,6 +111,8 @@ const IndexPage = () => {
           }[status];
           const isAvailable = status === 'Available';
 
+          
+
           return (
             <div key={movie.id} className="col">
               <div 
@@ -155,10 +158,16 @@ const IndexPage = () => {
                     <button 
                       className="btn btn-sm" 
                       style={{ 
-                        backgroundColor: isAvailable ? '#ebd0ad' : '#6c757d', 
+                       backgroundColor:
+                          hoveredMovieId === movie.id
+                            ? (isAvailable ? '#d4c68d' : '#5a626a')
+                            : (isAvailable ? '#ebd0ad' : '#6c757d'),
                         color: isAvailable ? '#1a1a2e' : 'white',
-                        padding: '0.25rem 0.5rem'
+                        padding: '0.25rem 0.5rem',
+                        transition: 'background-color 0.3s ease'
                       }}
+                      onMouseEnter={() => setHoveredMovieId(movie.id)}
+                      onMouseLeave={() => setHoveredMovieId(null)}
                       onClick={(e) => {
                         e.stopPropagation();
                         navigate(`/movies/${movie.id}`);

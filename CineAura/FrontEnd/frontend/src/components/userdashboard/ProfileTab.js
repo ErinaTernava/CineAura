@@ -5,6 +5,8 @@ import UserForm from './UserForm';
 
 const ProfileTab = ({ userData, setUserData, setMessage }) => {
   const [editMode, setEditMode] = useState(false);
+  const [editHover, setEditHover] = useState(false);
+  const [cancelHover, setCancelHover] = useState(false);
   const [formData, setFormData] = useState({
     firstName: userData.firstName || '',
     lastName: userData.lastName || '',
@@ -81,16 +83,19 @@ const ProfileTab = ({ userData, setUserData, setMessage }) => {
         {!editMode ? (
           <button
             onClick={() => setEditMode(true)}
+            onMouseEnter={() => setEditHover(true)}
+            onMouseLeave={() => setEditHover(false)}
             style={{
               display: 'flex',
               alignItems: 'center',
               padding: '8px 15px',
-              backgroundColor: '#ebd0ad',
+              backgroundColor: editHover ? '#d1b386' : '#ebd0ad',
               color: '#0b1214',
               border: 'none',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              transition: 'background-color 0.3s ease'
             }}
           >
             <FiEdit2 style={{ marginRight: '8px' }} />
@@ -106,16 +111,19 @@ const ProfileTab = ({ userData, setUserData, setMessage }) => {
                 email: userData.email
               });
             }}
+            onMouseEnter={() => setCancelHover(true)}
+            onMouseLeave={() => setCancelHover(false)}
             style={{
               display: 'flex',
               alignItems: 'center',
               padding: '8px 15px',
-              backgroundColor: '#7f8c8d',
+              backgroundColor: cancelHover ? '#95a5a6' : '#7f8c8d',
               color: '#0b1214',
               border: 'none',
               borderRadius: '4px',
               cursor: 'pointer',
-              fontWeight: 'bold'
+              fontWeight: 'bold',
+              transition: 'background-color 0.3s ease'
             }}
           >
             <FiX style={{ marginRight: '8px' }} />
