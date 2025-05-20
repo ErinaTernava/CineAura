@@ -14,6 +14,7 @@ namespace CineAura.Models
         [Required]
         public string Row { get; set; }
         public int SeatNumber { get; set; }
+        
 
     }
 }
