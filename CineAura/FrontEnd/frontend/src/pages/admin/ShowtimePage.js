@@ -1,78 +1,96 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import useAuthToken from '../../hooks/useAuthToken';
-import ShowtimeCard from '../../components/admin/ShowtimeCard';
+import axios from 'axios';
+import ShowtimeCard from '../../components/admin/ShowtimeCard'; 
+import DeleteShowtimeModal from '../../components/admin/DeleteShowtimeModal';
 
 const ShowtimesPage = () => {
-  const { token } = useAuthToken();
   const [showtimes, setShowtimes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showtimeIdToDelete, setShowtimeIdToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
- useEffect(() => {
-     const fetchShowtimes = async () => {
-       try {
-         const response = await fetch('http://localhost:5283/api/Showtime/getAll', {
-           headers: { 'Authorization': `Bearer ${token}` }
-         });
-         if (!response.ok) throw new Error('Failed to fetch showtimes');
-         const data = await response.json();
-         setShowtimes(data);
-       } catch (err) {
-         setError(err.message);
-       } finally {
-         setLoading(false);
-       }
-     };
- 
-     fetchShowtimes();
-   }, [token]);
+  useEffect(() => {
+    const fetchShowtimes = async () => {
+      try {
+        const response = await axios.get('http://localhost:5283/api/Showtime/getAll', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`
+          }
+        });
+        setShowtimes(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchShowtimes();
+  }, []);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this showtime?')) return;
-    
+  const handleDeleteClick = (id) => {
+    setShowtimeIdToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsDeleting(true);
     try {
-      const response = await fetch(`http://localhost:5283/api/Showtime/delete/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
+      await axios.delete(`http://localhost:5283/api/Showtime/delete?id=${showtimeIdToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
-      
-      if (!response.ok) throw new Error('Failed to delete showtime');
-      
-      setShowtimes(showtimes.filter(showtime => showtime.id !== id));
+      setShowtimes(showtimes.filter(showtime => showtime.id !== showtimeIdToDelete));
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+      setShowtimeIdToDelete(null);
     }
   };
 
-  if (loading) return <div className="text-center py-5">Loading showtimes...</div>;
+  if (loading) return <div className="text-center py-5 text-light">Loading...</div>;
   if (error) return <div className="alert alert-danger">Error: {error}</div>;
 
   return (
-     <div className="container py-4">
-       <div className="d-flex justify-content-between align-items-center mb-4">
-         <h2 style={{ color: '#ebd0ad' }}>Showtime Management</h2>
-         <Link to="/admin/add-showtime" className="btn" style={{ backgroundColor: '#ebd0ad', color: '#1a1a2e' }}>
-           Add New Showtime
-         </Link>
-       </div>
- 
-       <div className="d-grid gap-4" 
-       style={{
-        display: 'grid',
-        gridTemplateColumns:'repeat(auto-fit,minmax(300px, 1fr))'
-       }}>
-         {showtimes.map(showtime => (
-           <div className="col" key={showtime.id}>
-             <ShowtimeCard 
-               showtime={showtime} 
-               onDelete={handleDelete} 
-             />
-           </div>
-         ))}
-       </div>
-     </div>
-   );
- };
- 
+    <div className="container py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 style={{ color: '#ebd0ad' }}>Showtime Management</h2>
+        <Link to="/admin/add-showtime" className="btn" style={{ backgroundColor: '#ebd0ad', color: '#1a1a2e' }}>
+          Add New Showtime
+        </Link>
+      </div>
+
+      <div className="d-flex flex-wrap gap-4 justify-content-center">
+        {showtimes.map(showtime => (
+          <div 
+            key={showtime.id} 
+            style={{ flex: '1 1 300px', maxWidth: '400px' }}
+          >
+            <ShowtimeCard 
+              showtime={showtime} 
+              onDeleteClick={handleDeleteClick} 
+            />
+          </div>
+        ))}
+      </div>
+
+      {showDeleteModal && (
+        <DeleteShowtimeModal 
+          onConfirm={confirmDelete}
+          onCancel={() => {
+            setShowDeleteModal(false);
+            setShowtimeIdToDelete(null);
+          }}
+          isDeleting={isDeleting}
+        />
+      )}
+    </div>
+  );
+};
+
 export default ShowtimesPage;

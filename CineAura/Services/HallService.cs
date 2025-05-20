@@ -87,16 +87,50 @@ namespace CineAura.Services
             {
                 var model = hall.Adapt<Hall>();
                 _context.Hall.Add(model);
-                var result = await _context.SaveChangesAsync();
+                var result = await _context.SaveChangesAsync(); 
 
-                return result > 0;
+                if (result <= 0)
+                    return false;
+
+               
+                int totalSeats = model.HallType.ToLower() == "2d" ? 66 : 56;
+                int seatsPerRow = 11; 
+                int numRows = (int)Math.Ceiling((double)totalSeats / seatsPerRow);
+
+                var seats = new List<Seat>();
+                for (int row = 0; row < numRows; row++)
+                {
+                    string rowLetter = ((char)('A' + row)).ToString();
+
+                    for (int seat = 1; seat <= seatsPerRow; seat++)
+                    {
+                        int currentSeatNumber = row * seatsPerRow + seat;
+                        if (currentSeatNumber > totalSeats)
+                            break;
+
+                        seats.Add(new Seat
+                        {
+                            Row = rowLetter,
+                            SeatNumber = seat,
+                            HallId = model.Id,
+                            
+                        });
+                    }
+                }
+
+                _context.Seat.AddRange(seats);
+                var seatResult = await _context.SaveChangesAsync();
+
+                return seatResult > 0;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw new Exception("An error occurred while saving the hall.");
+                throw new Exception("An error occurred while saving the hall and seats.");
             }
         }
+
+
         #endregion
 
         #region Update

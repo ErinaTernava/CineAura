@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
 
-const UserRow = ({ user, onDelete }) => {
-   const [isHoveredRow, setIsHoveredRow] = useState(false);
+const UserRow = ({ user, onDeleteClick }) => {
+  const [isHoveredRow, setIsHoveredRow] = useState(false);
   const [isHoveredBtn, setIsHoveredBtn] = useState(false);
+
   return (
     <tr
       onMouseEnter={() => setIsHoveredRow(true)}
@@ -28,17 +29,17 @@ const UserRow = ({ user, onDelete }) => {
           borderRadius: '20px',
           fontWeight: '500',
           fontSize: '0.85rem',
-          backgroundColor: user.role === 'Admin' ? '#ebd0ad(159, 161, 41, 0.58)' : '',
-          color: user.role === 'Admin' ? '#ffc107' : '#17a2b8',
-          border: `1px solid ${user.role === 'Admin' ? '#ffc107' : '#17a2b8'}`
+          backgroundColor: user.role === 'Admin' ? 'rgba(235, 208, 173, 0.2)' : 'rgba(23, 162, 184, 0.2)',
+          color: user.role === 'Admin' ? '#ebd0ad' : '#17a2b8',
+          border: `1px solid ${user.role === 'Admin' ? '#ebd0ad' : '#17a2b8'}`
         }}>
           {user.role}
         </span>
       </td>
       <td style={{ padding: '16px' }}>
         <button
-          onClick={() => onDelete(user.id)}
-            onMouseEnter={() => setIsHoveredBtn(true)}
+          onClick={() => onDeleteClick(user.id)}
+          onMouseEnter={() => setIsHoveredBtn(true)}
           onMouseLeave={() => setIsHoveredBtn(false)}
           style={{
             display: 'flex',

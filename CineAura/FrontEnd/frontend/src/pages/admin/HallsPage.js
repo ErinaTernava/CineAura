@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import HallCard from '../../components/admin/HallCard'; 
+import DeleteHallModal from '../../components/admin/DeleteHallModal'; 
 
 const HallsPage = () => {
   const [halls, setHalls] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [hallIdToDelete, setHallIdToDelete] = useState(null);
 
   useEffect(() => {
     const fetchHalls = async () => {
@@ -26,18 +29,24 @@ const HallsPage = () => {
     fetchHalls();
   }, []);
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this hall?')) {
-      try {
-        await axios.delete(`http://localhost:5283/api/Hall/delete?id=${id}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        });
-        setHalls(halls.filter(hall => hall.id !== id));
-      } catch (err) {
-        setError(err.response?.data?.message || err.message);
-      }
+  const handleDelete = (id) => {
+    setHallIdToDelete(id);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    try {
+      await axios.delete(`http://localhost:5283/api/Hall/delete?id=${hallIdToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      setHalls(halls.filter(hall => hall.id !== hallIdToDelete));
+    } catch (err) {
+      setError(err.response?.data?.message || err.message);
+    } finally {
+      setShowDeleteModal(false);
+      setHallIdToDelete(null);
     }
   };
 
@@ -53,16 +62,23 @@ const HallsPage = () => {
         </Link>
       </div>
 
-        <div className="d-flex flex-wrap gap-4 justify-content-center">
-          {halls.map(hall => (
-            <div 
-              key={hall.id} 
-              style={{ flex: '1 1 300px', maxWidth: '400px' }}
-            >
-          <HallCard hall={hall} onDelete={handleDelete} />
+      <div className="d-flex flex-wrap gap-4 justify-content-center">
+        {halls.map(hall => (
+          <div 
+            key={hall.id} 
+            style={{ flex: '1 1 300px', maxWidth: '400px' }}
+          >
+            <HallCard hall={hall} onDelete={handleDelete} />
           </div>
-         ))}
-        </div>
+        ))}
+      </div>
+
+      {showDeleteModal && (
+        <DeleteHallModal 
+          onConfirm={confirmDelete}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      )}
     </div>
   );
 };

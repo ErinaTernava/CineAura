@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import useAuthToken from '../../hooks/useAuthToken';
-import UserRow from '../../components/admin/UserRow'
+import UserRow from '../../components/admin/UserRow';
+import DeleteUserModal from '../../components/admin/DeleteUserModal';
+
 const UsersPage = () => {
   const { token } = useAuthToken();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -26,20 +31,28 @@ const UsersPage = () => {
     fetchUsers();
   }, [token]);
 
-  const handleDelete = async (userId) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) return;
-    
+  const handleDeleteClick = (userId) => {
+    setUserIdToDelete(userId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    setIsDeleting(true);
     try {
-      const response = await fetch(`http://localhost:5283/api/User/delete?id=${userId}`, {
+      const response = await fetch(`http://localhost:5283/api/User/delete?id=${userIdToDelete}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
       if (!response.ok) throw new Error('Failed to delete user');
       
-      setUsers(users.filter(user => user.id !== userId));
+      setUsers(users.filter(user => user.id !== userIdToDelete));
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+      setUserIdToDelete(null);
     }
   };
 
@@ -65,12 +78,23 @@ const UsersPage = () => {
               <UserRow 
                 key={user.id}
                 user={user}
-                onDelete={handleDelete}
+                onDeleteClick={handleDeleteClick}
               />
             ))}
           </tbody>
         </table>
       </div>
+
+      {showDeleteModal && (
+        <DeleteUserModal 
+          onConfirm={confirmDelete}
+          onCancel={() => {
+            setShowDeleteModal(false);
+            setUserIdToDelete(null);
+          }}
+          isDeleting={isDeleting}
+        />
+      )}
     </div>
   );
 };
