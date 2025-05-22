@@ -3,6 +3,7 @@ import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import useAuthToken from '../hooks/useAuthToken'; 
 import { jwtDecode } from 'jwt-decode';
 
+
 const SeatPicker = () => {
   const [hallSeats, setHallSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -13,6 +14,9 @@ const SeatPicker = () => {
   const [movie, setMovie] = useState(null);
   const [showtime, setShowtime] = useState(null);
   const [hall, setHall] = useState(null);
+  const [loginError, setLoginError] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
   const { token } = useAuthToken();
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -176,9 +180,8 @@ const SeatPicker = () => {
   };
 
   const addToCart = async () => {
-    if (!getUserId) {
-      alert('Please log in to book tickets');
-      navigate('/login');
+    if (!getUserId()) {
+      setShowLoginPrompt(true);
       return;
     }
 
@@ -424,6 +427,43 @@ const SeatPicker = () => {
           >
             Add to Cart
           </button>
+
+
+          {showLoginPrompt && (
+          <div style={{
+            background: '#2d2d2d',
+            padding: '20px',
+            borderRadius: '8px',
+            marginTop: '20px',
+            border: '1px solid #f44336',
+            color: 'white',
+            textAlign: 'center'
+          }}>
+            <h3 style={{ color: '#f44336' }}>Failed to add to cart</h3>
+            <p>You need to be logged in to book tickets.</p>
+            <button 
+              onClick={() => navigate('/login')}
+              style={{
+                background: '#ebd0ad',
+                color: '#1a1a2e',
+                border: 'none',
+                padding: '10px 20px',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                marginTop: '15px',
+                fontSize: '1rem'
+              }}
+              onMouseOver={(e) => e.target.style.background = '#d4b98c'}
+              onMouseOut={(e) => e.target.style.background = '#ebd0ad'}
+            >
+              Go to Login
+            </button>
+
+            
+          </div>
+        )}
+
         </div>
       )}
     </div>
