@@ -104,14 +104,8 @@ const SearchResultsPage = () => {
                           color: isAvailable ? '#1a1a2e' : 'white',
                           padding: '0.25rem 0.5rem'
                         }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (isAvailable) {
-                            alert('Ticket purchasing will be available soon!');
-                          } else {
-                            navigate(`/movies/${movie.id}`);
-                          }
-                        }}
+                        onClick= {() => navigate(`/movies/${movie.id}`)
+                        }
                       >
                         {isAvailable ? 'Tickets' : 'More Info'}
                       </button>
