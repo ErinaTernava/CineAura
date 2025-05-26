@@ -15,6 +15,13 @@ const IndexPage = () => {
   const [selectedGenreId, setSelectedGenreId] = useState('');
   const [hoveredMovieId, setHoveredMovieId] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 12;
+  const indexOfLastMovie = currentPage * pageSize;
+  const indexOfFirstMovie = indexOfLastMovie - pageSize;
+  const currentMovies = filteredMovies.slice(indexOfFirstMovie, indexOfLastMovie);
+  const totalPages = Math.ceil(filteredMovies.length / pageSize);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,6 +64,7 @@ const IndexPage = () => {
         });
         setFilteredMovies(filtered);
       }
+      setCurrentPage(1);
     };
 
     filterMovies();
@@ -102,7 +110,7 @@ const IndexPage = () => {
       />
       
       <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4">
-        {filteredMovies.map(movie => {
+        {currentMovies.map(movie => {
           const status = getMovieStatus(movie.releaseDate, movie.endDate);
           const statusColors = {
             'Available': { bg: 'badge rounded-pill text-bg-light', text: 'text-dark' },
@@ -181,6 +189,27 @@ const IndexPage = () => {
             </div>
           );
         })}
+      </div>
+     <div className="d-flex justify-content-center mt-4">
+        <nav>
+          <ul className="pagination">
+            {[...Array(totalPages)].map((_, i) => (
+              <li key={i} className={`page-item ${currentPage === i + 1 ? 'active' : ''}`}>
+                <button
+                  className="page-link"
+                  style={{
+                    backgroundColor: currentPage === i + 1 ? '#ebd0ad' : 'white',
+                    color: currentPage === i + 1 ? '#1a1a2e' : '#000',
+                    border: '1px solid #ccc'
+                  }}
+                  onClick={() => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </div>
   );
