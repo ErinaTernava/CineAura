@@ -56,7 +56,7 @@ namespace CineAura.Controllers
         #region Update
 
         [HttpPut("update")]
-        public async Task<IActionResult> Update(int id, UserDTO request)
+        public async Task<IActionResult> Update(int id,[FromBody] UserUpdateDTO request)
         {
             try
             {

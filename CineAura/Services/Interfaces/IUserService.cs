@@ -6,7 +6,7 @@ namespace CineAura.Services.Interfaces
     {
         Task<List<UserDTO>> GetAll();
         Task<UserDTO> GetById(int id);
-        Task<UserDTO> Update(int id, UserDTO user);
+        Task<UserDTO> Update(int id, UserUpdateDTO user);
         Task<bool> Delete(int id);
     }
 }

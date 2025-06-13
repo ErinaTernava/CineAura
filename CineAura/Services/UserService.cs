@@ -76,7 +76,7 @@ namespace CineAura.Services
         #endregion
 
         #region Update
-        public async Task<UserDTO> Update(int id, UserDTO userDto)
+        public async Task<UserDTO> Update(int id, UserUpdateDTO userDto)
         {
             try
             {

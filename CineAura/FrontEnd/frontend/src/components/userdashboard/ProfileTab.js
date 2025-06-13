@@ -23,10 +23,8 @@ const ProfileTab = ({ userData, setUserData, setMessage }) => {
           'Authorization': `Bearer ${localStorage.getItem("token")}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          id: localStorage.getItem("userId"),
-          ...formData
-        })
+       body: JSON.stringify(formData)
+
       });
   
       const result = await response.json();
